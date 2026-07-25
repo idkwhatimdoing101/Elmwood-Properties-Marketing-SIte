@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import elmwoodLogo from "../assets/images/elmwood-logo.png";
+
 const links = [
   { href: "/", label: "Home" },
   { href: "/floor-plans", label: "Floor Plans" },
@@ -21,7 +24,7 @@ const current = Astro.url.pathname;
 <header class="nav">
   <div class="wrap nav__row">
     <a href="/" class="nav__brand">
-      Elmwood<span class="nav__brand-dot">.</span>
+      <Image src={elmwoodLogo} alt="Elmwood" class="nav__brand-img" widths={[280, 420]} sizes="(max-width: 40rem) 140px, 210px" />
     </a>
 
     <button
@@ -120,16 +123,19 @@ const current = Astro.url.pathname;
   }
 
   .nav__brand {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 500;
-    font-size: 1.6rem;
-    text-decoration: none;
-    color: var(--color-charcoal);
+    display: flex;
+    align-items: center;
   }
 
-  .nav__brand-dot {
-    color: var(--color-forest);
+  .nav__brand-img {
+    height: 2.1rem;
+    width: auto;
+  }
+
+  @media (max-width: 56rem) {
+    .nav__brand-img {
+      height: 1.75rem;
+    }
   }
 
   .nav__toggle {

@@ -1,7 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
+import elmwoodHero from "../assets/images/elmwood-hero.jpg";
 
 const included = ["Parking", "Internet", "Water", "Bicycle Storage"];
 
@@ -34,27 +36,35 @@ const landmarks = [
   description="Elmwood Apartments — affordable, clean, secure student housing minutes from the University of Minnesota in SE Como and Marcy-Holmes."
 >
   <section class="hero">
-    <div class="wrap hero__grid">
-      <div class="hero__copy">
-        <p class="eyebrow">SE Como · Marcy-Holmes · Blocks from Dinkytown</p>
-        <h1>Elmwood Apartments: your U of M home.</h1>
-        <p class="lede">
-          Elmwood is the best place to live near the University of Minnesota — a few blocks
-          from campus, near Dinkytown, in the SE Como and Marcy-Holmes neighborhoods.
-        </p>
-        <ul class="hero__included">
-          {included.map((item) => <li>{item}</li>)}
-        </ul>
-        <p class="hero__note">
-          Included in rent for most apartments. Some residences include in-apartment laundry.
-          Our team cleans and sanitizes every building, every day.
-        </p>
-        <div class="hero__actions">
-          <a href="/apply" class="btn btn-primary">Apply Now</a>
-          <a href="/floor-plans" class="btn btn-outline">View Floor Plans</a>
-        </div>
+    <Image
+      src={elmwoodHero}
+      alt="Elmwood apartment buildings and a sunlit interior near SE Como, Minneapolis"
+      class="hero__media"
+      widths={[640, 1000, 1600, 2000]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; display: block; z-index: 0;"
+    />
+    <div class="hero__scrim"></div>
+    <div class="wrap hero__content">
+      <p class="eyebrow">SE Como · Marcy-Holmes · Blocks from Dinkytown</p>
+      <h1>Elmwood Apartments: your U of M home.</h1>
+      <p class="lede">
+        Elmwood is the best place to live near the University of Minnesota — a few blocks
+        from campus, near Dinkytown, in the SE Como and Marcy-Holmes neighborhoods.
+      </p>
+      <ul class="hero__included">
+        {included.map((item) => <li>{item}</li>)}
+      </ul>
+      <p class="hero__note">
+        Included in rent for most apartments. Some residences include in-apartment laundry.
+        Our team cleans and sanitizes every building, every day.
+      </p>
+      <div class="hero__actions">
+        <a href="/apply" class="btn btn-primary">Apply Now</a>
+        <a href="/floor-plans" class="btn btn-outline hero__btn-outline">View Floor Plans</a>
       </div>
-      <Photo label="Elmwood building exterior, SE Como" ratio="4 / 5" tone="forest" class="hero__photo" />
     </div>
   </section>
 
@@ -157,16 +167,47 @@ const landmarks = [
 </Layout>
 
 <style>
-  .hero__grid {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: clamp(2rem, 5vw, 4rem);
+  .hero {
+    position: relative;
+    display: flex;
     align-items: center;
-    padding-block: clamp(3rem, 6vw, 5.5rem);
+    min-height: clamp(30rem, 68vh, 40rem);
+    overflow: hidden;
+    color: var(--color-ivory);
   }
 
-  .hero__copy h1 {
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      100deg,
+      rgba(22, 25, 21, 0.82) 0%,
+      rgba(22, 25, 21, 0.6) 40%,
+      rgba(22, 25, 21, 0.22) 68%,
+      rgba(22, 25, 21, 0.05) 100%
+    ),
+    linear-gradient(0deg, rgba(22, 25, 21, 0.55) 0%, rgba(22, 25, 21, 0) 45%);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    max-width: 34rem;
+    padding-block: clamp(3rem, 10vw, 6rem) clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .hero__content .eyebrow {
+    color: var(--color-brass-light);
+  }
+
+  .hero__content h1 {
+    color: var(--color-ivory);
     margin-block: 0.9rem 1.1rem;
+  }
+
+  .hero__content .lede {
+    color: rgba(252, 251, 244, 0.88);
   }
 
   .hero__included {
@@ -181,15 +222,15 @@ const landmarks = [
     font-weight: 600;
     letter-spacing: 0.02em;
     padding: 0.45em 0.9em;
-    border: 1px solid var(--color-sage-line);
+    border: 1px solid rgba(252, 251, 244, 0.4);
     border-radius: 999px;
-    color: var(--color-forest);
+    color: var(--color-ivory);
   }
 
   .hero__note {
     margin-top: 1rem;
     font-size: 0.875rem;
-    color: var(--color-text-muted);
+    color: rgba(252, 251, 244, 0.72);
     max-width: 32em;
   }
 
@@ -198,6 +239,22 @@ const landmarks = [
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 2rem;
+  }
+
+  .hero__btn-outline {
+    color: var(--color-ivory);
+    border-color: rgba(252, 251, 244, 0.55);
+  }
+
+  .hero__btn-outline:hover {
+    background: rgba(252, 251, 244, 0.14);
+    color: var(--color-ivory);
+  }
+
+  @media (max-width: 30rem) {
+    .hero {
+      min-height: clamp(26rem, 72vh, 34rem);
+    }
   }
 
   .residences {
@@ -396,16 +453,11 @@ const landmarks = [
   }
 
   @media (max-width: 56rem) {
-    .hero__grid,
     .residences,
     .quality,
     .convenience,
     .international {
       grid-template-columns: 1fr;
-    }
-
-    .hero__photo {
-      order: -1;
     }
 
     .security__list {
