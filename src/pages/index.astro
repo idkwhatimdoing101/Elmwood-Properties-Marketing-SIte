@@ -38,7 +38,7 @@ const landmarks = [
   <section class="hero">
     <Image
       src={elmwoodHero}
-      alt="Elmwood apartment buildings and a sunlit interior near SE Como, Minneapolis"
+      alt="A grid of Elmwood apartment buildings and sunlit interiors near SE Como, Minneapolis"
       class="hero__media"
       widths={[640, 1000, 1600, 2000]}
       sizes="100vw"
@@ -48,22 +48,26 @@ const landmarks = [
     />
     <div class="hero__scrim"></div>
     <div class="wrap hero__content">
-      <p class="eyebrow">SE Como · Marcy-Holmes · Blocks from Dinkytown</p>
-      <h1>Elmwood Apartments: your U of M home.</h1>
-      <p class="lede">
-        Elmwood is the best place to live near the University of Minnesota — a few blocks
-        from campus, near Dinkytown, in the SE Como and Marcy-Holmes neighborhoods.
-      </p>
-      <ul class="hero__included">
-        {included.map((item) => <li>{item}</li>)}
-      </ul>
-      <p class="hero__note">
-        Included in rent for most apartments. Some residences include in-apartment laundry.
-        Our team cleans and sanitizes every building, every day.
-      </p>
-      <div class="hero__actions">
-        <a href="/apply" class="btn btn-primary">Apply Now</a>
-        <a href="/floor-plans" class="btn btn-outline hero__btn-outline">View Floor Plans</a>
+      <div class="hero__col-header">
+        <p class="eyebrow">SE Como · Marcy-Holmes · Blocks from Dinkytown</p>
+        <h1>Elmwood Apartments: your U of M home.</h1>
+      </div>
+      <div class="hero__col-body">
+        <p class="lede">
+          Elmwood is the best place to live near the University of Minnesota — a few blocks
+          from campus, near Dinkytown, in the SE Como and Marcy-Holmes neighborhoods.
+        </p>
+        <ul class="hero__included">
+          {included.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="hero__note">
+          Included in rent for most apartments. Some residences include in-apartment laundry.
+          Our team cleans and sanitizes every building, every day.
+        </p>
+        <div class="hero__actions">
+          <a href="/apply" class="btn btn-primary">Apply Now</a>
+          <a href="/floor-plans" class="btn btn-outline hero__btn-outline">View Floor Plans</a>
+        </div>
       </div>
     </div>
   </section>
@@ -181,33 +185,41 @@ const landmarks = [
     inset: 0;
     z-index: 1;
     background: linear-gradient(
-      100deg,
-      rgba(22, 25, 21, 0.82) 0%,
-      rgba(22, 25, 21, 0.6) 40%,
-      rgba(22, 25, 21, 0.22) 68%,
-      rgba(22, 25, 21, 0.05) 100%
-    ),
-    linear-gradient(0deg, rgba(22, 25, 21, 0.55) 0%, rgba(22, 25, 21, 0) 45%);
+      180deg,
+      rgba(22, 25, 21, 0.5) 0%,
+      rgba(22, 25, 21, 0.16) 24%,
+      rgba(22, 25, 21, 0.16) 76%,
+      rgba(22, 25, 21, 0.5) 100%
+    );
   }
 
   .hero__content {
     position: relative;
     z-index: 2;
-    max-width: 34rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+    max-width: 66rem;
     padding-block: clamp(3rem, 10vw, 6rem) clamp(3rem, 6vw, 4.5rem);
   }
 
   .hero__content .eyebrow {
     color: var(--color-brass-light);
+    background: rgba(22, 25, 21, 0.4);
+    padding: 0.4em 0.85em;
+    border-radius: 999px;
   }
 
   .hero__content h1 {
     color: var(--color-ivory);
-    margin-block: 0.9rem 1.1rem;
+    margin-top: 0.9rem;
+    text-shadow: 0 2px 20px rgba(22, 25, 21, 0.45);
   }
 
   .hero__content .lede {
-    color: rgba(252, 251, 244, 0.88);
+    color: rgba(252, 251, 244, 0.94);
+    text-shadow: 0 1px 12px rgba(22, 25, 21, 0.55);
   }
 
   .hero__included {
@@ -222,7 +234,8 @@ const landmarks = [
     font-weight: 600;
     letter-spacing: 0.02em;
     padding: 0.45em 0.9em;
-    border: 1px solid rgba(252, 251, 244, 0.4);
+    background: rgba(22, 25, 21, 0.32);
+    border: 1px solid rgba(252, 251, 244, 0.45);
     border-radius: 999px;
     color: var(--color-ivory);
   }
@@ -230,7 +243,8 @@ const landmarks = [
   .hero__note {
     margin-top: 1rem;
     font-size: 0.875rem;
-    color: rgba(252, 251, 244, 0.72);
+    color: rgba(252, 251, 244, 0.85);
+    text-shadow: 0 1px 10px rgba(22, 25, 21, 0.55);
     max-width: 32em;
   }
 
@@ -249,6 +263,13 @@ const landmarks = [
   .hero__btn-outline:hover {
     background: rgba(252, 251, 244, 0.14);
     color: var(--color-ivory);
+  }
+
+  @media (max-width: 48rem) {
+    .hero__content {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
   }
 
   @media (max-width: 30rem) {
