@@ -11,6 +11,25 @@ interface Props {
 const { title, description } = Astro.props;
 const ogImage = new URL("/images/elmwood-og.jpg", Astro.site ?? Astro.url);
 const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": "ApartmentComplex",
+  name: "Elmwood Apartments",
+  description:
+    "Studio through five-bedroom apartments and houses in the SE Como and Marcy-Holmes neighborhoods of Minneapolis, MN, walking distance to the University of Minnesota.",
+  url: (Astro.site ?? Astro.url).toString(),
+  telephone: "+1-612-623-4488",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "1420 Rollins Ave SE",
+    addressLocality: "Minneapolis",
+    addressRegion: "MN",
+    postalCode: "55414",
+    addressCountry: "US",
+  },
+  areaServed: ["University of Minnesota", "Dinkytown", "SE Como", "Marcy-Holmes", "Minneapolis, MN"],
+};
 ---
 
 <!doctype html>
@@ -32,6 +51,8 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={pageUrl} />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -14,51 +14,53 @@ const links = [
 const current = Astro.url.pathname;
 ---
 
-<div class="utility-bar">
-  <div class="wrap utility-bar__row">
-    <a href="tel:+16126234488" class="utility-bar__phone">(612) 623-4488 — we answer, day or night</a>
-    <a href="/maintenance-request" class="utility-bar__resident">Current resident? Submit a maintenance request →</a>
+<div class="site-header">
+  <div class="utility-bar">
+    <div class="wrap utility-bar__row">
+      <a href="tel:+16126234488" class="utility-bar__phone">(612) 623-4488 — we answer, day or night</a>
+      <a href="/maintenance-request" class="utility-bar__resident">Current resident? Submit a maintenance request →</a>
+    </div>
   </div>
+
+  <header class="nav">
+    <div class="wrap nav__row">
+      <a href="/" class="nav__brand">
+        <Image src={elmwoodLogo} alt="Elmwood" class="nav__brand-img" widths={[280, 420]} sizes="(max-width: 40rem) 140px, 210px" />
+      </a>
+
+      <button
+        class="nav__toggle"
+        id="nav-toggle"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        aria-label="Open menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="nav__menu" id="nav-menu">
+        <ul class="nav__links">
+          {
+            links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="nav__link"
+                  aria-current={current === link.href ? "page" : undefined}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a href="/apply" class="btn btn-primary nav__cta">Apply Now</a>
+      </nav>
+    </div>
+  </header>
 </div>
-
-<header class="nav">
-  <div class="wrap nav__row">
-    <a href="/" class="nav__brand">
-      <Image src={elmwoodLogo} alt="Elmwood" class="nav__brand-img" widths={[280, 420]} sizes="(max-width: 40rem) 140px, 210px" />
-    </a>
-
-    <button
-      class="nav__toggle"
-      id="nav-toggle"
-      aria-expanded="false"
-      aria-controls="nav-menu"
-      aria-label="Open menu"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-    <nav class="nav__menu" id="nav-menu">
-      <ul class="nav__links">
-        {
-          links.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="nav__link"
-                aria-current={current === link.href ? "page" : undefined}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-      <a href="/apply" class="btn btn-primary nav__cta">Apply Now</a>
-    </nav>
-  </div>
-</header>
 
 <script>
   const toggle = document.getElementById("nav-toggle");
@@ -79,10 +81,17 @@ const current = Astro.url.pathname;
 </script>
 
 <style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
   .utility-bar {
     background: var(--color-charcoal);
-    color: var(--color-text-on-dark-muted);
-    font-size: 0.75rem;
+    color: var(--color-text-on-dark);
+    font-size: 0.8125rem;
+    font-weight: 700;
     letter-spacing: 0.02em;
   }
 
@@ -108,9 +117,6 @@ const current = Astro.url.pathname;
   }
 
   .nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
     background: var(--color-ivory);
     border-bottom: 1px solid var(--color-sage-line);
   }

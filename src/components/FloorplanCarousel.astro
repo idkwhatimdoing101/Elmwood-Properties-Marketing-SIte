@@ -1,0 +1,149 @@
+---
+import Photo from "./Photo.astro";
+import { unitTypes, startingPrice, fmt } from "../data/floorplans";
+---
+
+<section class="section floorplan-carousel">
+  <div class="wrap floorplan-carousel__head">
+    <div>
+      <p class="eyebrow">Floor Plans &amp; Pricing</p>
+      <h2>Studio through five bedroom, priced and ready.</h2>
+    </div>
+    <div class="floorplan-carousel__nav">
+      <button type="button" class="carousel-btn" id="fp-prev" aria-label="Previous floor plan">‹</button>
+      <button type="button" class="carousel-btn" id="fp-next" aria-label="Next floor plan">›</button>
+    </div>
+  </div>
+
+  <div class="floorplan-carousel__track-wrap wrap" id="fp-track">
+    <ul class="floorplan-carousel__track">
+      {
+        unitTypes.map((type) => {
+          const price = startingPrice(type.key);
+          return (
+            <li class="floorplan-carousel__slide">
+              <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
+              <h3>{type.name}</h3>
+              <p class="floorplan-carousel__price">
+                {price ? `Starting at ${fmt(price)}/mo` : "Contact for pricing"}
+              </p>
+              <a href={`/floor-plans#${type.key}`} class="btn btn-outline floorplan-carousel__cta">
+                View
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById("fp-track");
+  const prev = document.getElementById("fp-prev");
+  const next = document.getElementById("fp-next");
+
+  const scrollByCard = (dir) => {
+    const slide = track?.querySelector(".floorplan-carousel__slide");
+    const amount = slide ? slide.clientWidth + 24 : 300;
+    track?.scrollBy({ left: dir * amount, behavior: "smooth" });
+  };
+
+  prev?.addEventListener("click", () => scrollByCard(-1));
+  next?.addEventListener("click", () => scrollByCard(1));
+</script>
+
+<style>
+  .floorplan-carousel {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .floorplan-carousel__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .floorplan-carousel__head h2 {
+    margin-top: 0.5rem;
+  }
+
+  .floorplan-carousel__nav {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .carousel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--color-sage-line);
+    background: var(--color-ivory);
+    color: var(--color-forest);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .carousel-btn:hover {
+    background: var(--color-forest);
+    border-color: var(--color-forest);
+    color: var(--color-ivory);
+  }
+
+  .floorplan-carousel__track-wrap {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .floorplan-carousel__track-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .floorplan-carousel__track {
+    display: flex;
+    gap: 1.5rem;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.25rem;
+  }
+
+  .floorplan-carousel__slide {
+    flex: 0 0 auto;
+    width: clamp(13.5rem, 40vw, 17rem);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .floorplan-carousel__slide h3 {
+    margin-top: 1rem;
+  }
+
+  .floorplan-carousel__price {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.9375rem;
+    color: var(--color-forest);
+    margin-block: 0.35rem 1rem;
+  }
+
+  .floorplan-carousel__cta {
+    width: 100%;
+    justify-content: center;
+    margin-top: auto;
+  }
+
+  @media (max-width: 30rem) {
+    .floorplan-carousel__slide {
+      width: 78vw;
+    }
+  }
+</style>
