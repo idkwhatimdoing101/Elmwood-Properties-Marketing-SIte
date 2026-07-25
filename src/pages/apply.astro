@@ -1,0 +1,321 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Divider from "../components/Divider.astro";
+
+const steps = [
+  {
+    n: "01",
+    title: "Tell us about yourself",
+    body: "Fill out the application below — who you are, what you're looking for, and when you need to move in.",
+  },
+  {
+    n: "02",
+    title: "We review and verify",
+    body: "We'll run a standard background and credit check. Students without an established credit history often need a guarantor or co-signer — that's normal, and our office will walk you through it.",
+  },
+  {
+    n: "03",
+    title: "Sign your lease",
+    body: "Once you're approved, we'll send over the lease and get a move-in date locked in.",
+  },
+  {
+    n: "04",
+    title: "Move in",
+    body: "Pick up your keys, and you're home. Parking, internet, and water are already set up if your unit includes them.",
+  },
+];
+
+const floorPlanOptions = [
+  "Studio",
+  "1 Bedroom",
+  "2 Bedroom",
+  "3 Bedroom",
+  "4 Bedroom",
+  "5 Bedroom",
+  "Not sure yet",
+];
+---
+
+<Layout
+  title="Apply"
+  description="Apply for an apartment or house at Elmwood — a straightforward application process for U of M students, staff, and faculty."
+>
+  <section class="section hero-sm">
+    <div class="wrap">
+      <p class="eyebrow">Apply</p>
+      <h1>Ready to move in? Let's get you set up.</h1>
+      <p class="lede">
+        Our application takes a few minutes. Have questions before you start? Call the
+        office at (612) 623-4488 — we pick up.
+      </p>
+    </div>
+  </section>
+
+  <Divider />
+
+  <section class="section section--sage">
+    <div class="wrap">
+      <p class="eyebrow">How It Works</p>
+      <h2 class="steps-heading">Four steps, start to keys.</h2>
+      <div class="steps">
+        {
+          steps.map((step) => (
+            <div class="step">
+              <span class="step__n">{step.n}</span>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap apply-grid">
+      <div>
+        <form
+          class="netlify-form"
+          name="apply"
+          method="POST"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+        >
+          <input type="hidden" name="form-name" value="apply" />
+          <p hidden>
+            <label>
+              Don't fill this out if you're human: <input name="bot-field" autocomplete="off" tabindex="-1" />
+            </label>
+          </p>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="name">Full legal name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+            </div>
+            <div class="field">
+              <label for="email">Email (optional)</label>
+              <input id="email" name="email" type="email" autocomplete="email" />
+            </div>
+            <div class="field">
+              <label for="status">I am a...</label>
+              <select id="status" name="status" required>
+                <option value="">Select one</option>
+                <option>U of M student</option>
+                <option>U of M staff or faculty</option>
+                <option>International student</option>
+                <option>Not affiliated with the U of M</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="floorplan">Interested in</label>
+              <select id="floorplan" name="floorplan" required>
+                <option value="">Select a floor plan</option>
+                {floorPlanOptions.map((opt) => <option>{opt}</option>)}
+              </select>
+            </div>
+            <div class="field">
+              <label for="movein">Desired move-in date</label>
+              <input id="movein" name="movein" type="date" required />
+            </div>
+            <div class="field">
+              <label for="occupants">Total occupants</label>
+              <input id="occupants" name="occupants" type="number" min="1" max="6" />
+            </div>
+            <div class="field">
+              <label for="guarantor">Will you need a guarantor / co-signer?</label>
+              <select id="guarantor" name="guarantor">
+                <option value="">Not sure yet</option>
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+            </div>
+            <div class="field field--full">
+              <label for="notes">Anything else we should know?</label>
+              <textarea
+                id="notes"
+                name="notes"
+                placeholder="Roommates, accessibility needs, questions about a specific building..."
+              ></textarea>
+            </div>
+          </div>
+
+          <p class="field-note apply-note">
+            No application fee due today — we'll confirm any fees or deposit details once we
+            review your application together.
+          </p>
+
+          <button type="submit" class="btn btn-primary">Submit Application</button>
+        </form>
+
+        <div class="form-status" data-form-status hidden>
+          <p data-success>
+            Application received. We typically call within a day with next steps.
+          </p>
+          <p data-error>Something went wrong submitting that. Please try again, or call us at (612) 623-4488.</p>
+        </div>
+      </div>
+
+      <aside class="apply-aside">
+        <h3>International students, welcome.</h3>
+        <p>
+          We work with plenty of students coming from outside the U.S. — different
+          documentation, different credit history, same process. Reach out before you apply
+          if you'd like to talk it through first.
+        </p>
+        <a href="/contact" class="text-link">Contact the office →</a>
+
+        <div class="apply-aside__divider"></div>
+
+        <h3>Not sure which floor plan yet?</h3>
+        <p>See sizes, layouts, and current pricing before you decide.</p>
+        <a href="/floor-plans" class="text-link">View Floor Plans →</a>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import "../scripts/netlify-form.js";
+
+  const status = document.querySelector("[data-form-status]");
+  if (status) {
+    const observer = new MutationObserver(() => {
+      const state = (status as HTMLElement).dataset.state;
+      status.querySelectorAll("p").forEach((p) => {
+        const show = (state === "success" && p.hasAttribute("data-success")) ||
+          (state === "error" && p.hasAttribute("data-error"));
+        (p as HTMLElement).style.display = show ? "" : "none";
+      });
+    });
+    observer.observe(status, { attributes: true, attributeFilter: ["data-state"] });
+  }
+</script>
+
+<style>
+  .hero-sm h1 {
+    margin-block: 0.9rem 1rem;
+    max-width: 34rem;
+  }
+
+  .hero-sm .lede {
+    max-width: 34rem;
+  }
+
+  .steps-heading {
+    margin-block: 0.9rem 2.5rem;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .step__n {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--color-brass);
+    margin-bottom: 0.75rem;
+  }
+
+  .step h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .step p {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .apply-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .apply-note {
+    margin-block: 1.25rem;
+  }
+
+  .form-status {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+  }
+
+  .form-status[data-state="success"] {
+    background: var(--color-sage);
+    color: var(--color-forest-deep);
+  }
+
+  .form-status[data-state="error"] {
+    background: #f6e6e0;
+    color: #7a3420;
+  }
+
+  .form-status p {
+    display: none;
+  }
+
+  .apply-aside {
+    border: 1px solid var(--color-sage-line);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    background: var(--color-sage);
+  }
+
+  .apply-aside h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .apply-aside p {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .apply-aside__divider {
+    height: 1px;
+    background: var(--color-sage-line);
+    margin-block: 1.75rem;
+  }
+
+  .text-link {
+    display: inline-block;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-forest);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-forest);
+    padding-bottom: 2px;
+  }
+
+  @media (max-width: 56rem) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .apply-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

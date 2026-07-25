@@ -1,0 +1,218 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Divider from "../components/Divider.astro";
+---
+
+<Layout
+  title="Contact"
+  description="Reach the Elmwood leasing office — call (612) 623-4488, day or night, or stop by 1420 Rollins Ave SE."
+>
+  <section class="section hero-sm">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h1>Talk to a real person, not a call tree.</h1>
+      <p class="lede">
+        Question about a unit, a tour, or an application already in progress? Reach out below,
+        or just call — we answer the phone ourselves, day or night.
+      </p>
+    </div>
+  </section>
+
+  <Divider />
+
+  <section class="section">
+    <div class="wrap contact-grid">
+      <div class="contact-form-wrap">
+        <form
+          class="netlify-form"
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <p hidden>
+            <label>
+              Don't fill this out if you're human: <input name="bot-field" autocomplete="off" tabindex="-1" />
+            </label>
+          </p>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="name">Full name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+            </div>
+            <div class="field">
+              <label for="email">Email (optional)</label>
+              <input id="email" name="email" type="email" autocomplete="email" />
+            </div>
+            <div class="field field--full">
+              <label for="topic">What's this about?</label>
+              <select id="topic" name="topic" required>
+                <option value="">Select one</option>
+                <option>General question</option>
+                <option>Schedule a tour</option>
+                <option>Application question</option>
+                <option>Accessible / ADA housing</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <div class="field field--full">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+
+        <div class="form-status" data-form-status hidden>
+          <p data-success>Thanks — your message is in. We'll call you back shortly.</p>
+          <p data-error>Something went wrong sending that. Please try again, or just call us at (612) 623-4488.</p>
+        </div>
+      </div>
+
+      <aside class="office-card">
+        <h3>Leasing Office</h3>
+        <address>
+          1420 Rollins Ave SE<br />
+          Minneapolis, MN 55414
+        </address>
+        <dl>
+          <div>
+            <dt>Phone</dt>
+            <dd><a href="tel:+16126234488">(612) 623-4488</a></dd>
+          </div>
+          <div>
+            <dt>Hours</dt>
+            <dd>Answered 24/7</dd>
+          </div>
+        </dl>
+        <div class="office-card__map">Map — 1420 Rollins Ave SE</div>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import "../scripts/netlify-form.js";
+
+  const status = document.querySelector("[data-form-status]");
+  if (status) {
+    const observer = new MutationObserver(() => {
+      const state = (status as HTMLElement).dataset.state;
+      status.querySelectorAll("p").forEach((p) => {
+        const show = (state === "success" && p.hasAttribute("data-success")) ||
+          (state === "error" && p.hasAttribute("data-error"));
+        (p as HTMLElement).style.display = show ? "" : "none";
+      });
+    });
+    observer.observe(status, { attributes: true, attributeFilter: ["data-state"] });
+  }
+</script>
+
+<style>
+  .hero-sm h1 {
+    margin-block: 0.9rem 1rem;
+    max-width: 34rem;
+  }
+
+  .hero-sm .lede {
+    max-width: 34rem;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .contact-form-wrap button {
+    margin-top: 0.75rem;
+  }
+
+  .form-status {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+  }
+
+  .form-status[data-state="success"] {
+    background: var(--color-sage);
+    color: var(--color-forest-deep);
+  }
+
+  .form-status[data-state="error"] {
+    background: #f6e6e0;
+    color: #7a3420;
+  }
+
+  .form-status p {
+    display: none;
+  }
+
+  .office-card {
+    border: 1px solid var(--color-sage-line);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    background: var(--color-sage);
+  }
+
+  .office-card h3 {
+    margin-bottom: 1.25rem;
+  }
+
+  .office-card address {
+    font-style: normal;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .office-card dl {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .office-card dt {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .office-card dd {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .office-card__map {
+    margin-top: 1.75rem;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(155deg, #dfe2cd 0%, #cdd2b9 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.875rem;
+    color: var(--color-forest-deep);
+    text-align: center;
+    padding: 1rem;
+  }
+
+  @media (max-width: 56rem) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

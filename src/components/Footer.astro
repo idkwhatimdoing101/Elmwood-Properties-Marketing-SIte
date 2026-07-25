@@ -1,0 +1,163 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap footer__top">
+    <div class="footer__brand">
+      <p class="footer__wordmark">Elmwood<span class="footer__wordmark-dot">.</span></p>
+      <p class="footer__blurb">
+        Seven buildings, one office, all within a mile of Dinkytown. We've been renting to
+        U of MN students, staff, and faculty in SE Como and Marcy-Holmes for years, and we
+        still pick up the phone ourselves.
+      </p>
+      <a class="footer__ada" href="/amenities#accessibility">
+        Learn about our ADA-compliant, disability-accessible housing
+      </a>
+    </div>
+
+    <nav class="footer__col" aria-label="Explore">
+      <p class="footer__heading">Explore</p>
+      <ul>
+        <li><a href="/floor-plans">Floor Plans</a></li>
+        <li><a href="/amenities">Amenities</a></li>
+        <li><a href="/neighborhood">Neighborhood</a></li>
+        <li><a href="/gallery">Gallery</a></li>
+      </ul>
+    </nav>
+
+    <nav class="footer__col" aria-label="Get started">
+      <p class="footer__heading">Get Started</p>
+      <ul>
+        <li><a href="/apply">Apply Now</a></li>
+        <li><a href="/contact">Contact the Office</a></li>
+        <li><a href="/maintenance-request">Maintenance Request</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <p class="footer__heading">Visit the Office</p>
+      <address>
+        1420 Rollins Ave SE<br />
+        Minneapolis, MN 55414
+      </address>
+      <p>
+        <a href="tel:+16126234488">(612) 623-4488</a>
+      </p>
+      <p class="footer__hours">Answered 24/7</p>
+    </div>
+  </div>
+
+  <div class="wrap footer__bottom">
+    <p>&copy; {year} Elmwood Properties. All rights reserved.</p>
+    <p>Equal Housing Opportunity</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-charcoal);
+    color: var(--color-text-on-dark-muted);
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1.1fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    padding-block: clamp(3rem, 5vw, 4.5rem) 3rem;
+  }
+
+  .footer__wordmark {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.75rem;
+    color: var(--color-ivory);
+    margin-bottom: 1rem;
+  }
+
+  .footer__wordmark-dot {
+    color: var(--color-brass-light);
+  }
+
+  .footer__blurb {
+    max-width: 26em;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  .footer__ada {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-size: 0.8125rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-brass-light);
+  }
+
+  .footer__heading {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ivory);
+    margin-bottom: 1.1rem;
+  }
+
+  .footer__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer__col a {
+    text-decoration: none;
+    font-size: 0.9375rem;
+    color: var(--color-text-on-dark-muted);
+    transition: color 0.2s ease;
+  }
+
+  .footer__col a:hover {
+    color: var(--color-brass-light);
+  }
+
+  address {
+    font-style: normal;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-bottom: 0.9rem;
+  }
+
+  .footer__col p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-bottom: 0.9rem;
+  }
+
+  .footer__hours {
+    font-size: 0.8125rem;
+    color: #8b9280;
+  }
+
+  .footer__bottom {
+    border-top: 1px solid rgba(252, 251, 244, 0.12);
+    padding-block: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  @media (max-width: 56rem) {
+    .footer__top {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .footer__top {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,415 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Divider from "../components/Divider.astro";
+import Photo from "../components/Photo.astro";
+
+const included = ["Parking", "Internet", "Water", "Bicycle Storage"];
+
+const qualityPoints = [
+  "Affordable — often half the cost of a dorm room",
+  "Clean, secure, and private — your own space, your own key",
+  "The most ideal locations for U of M students, staff, and professors",
+  "Away from the noise and congestion of dorms and crowded high-rises",
+  "24/7 maintenance, because a broken faucet shouldn't wait for Monday",
+];
+
+const securityPoints = [
+  "Security cameras cover halls, laundry rooms, parking areas, and every front and rear door",
+  "Keyless entry and internet-monitored surveillance across the property",
+  "A real person answers the phone, day or night",
+  "Someone is always reachable — call any hour, any day",
+];
+
+const landmarks = [
+  "Dinkytown's shops, coffee, and late-night food",
+  "Bierman Field Athletic Complex",
+  "U.S. Bank Stadium",
+  "Mariucci Arena",
+  "Van Cleve Park",
+];
+---
+
+<Layout
+  title="Your U of M Home"
+  description="Elmwood Apartments — affordable, clean, secure student housing minutes from the University of Minnesota in SE Como and Marcy-Holmes."
+>
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow">SE Como · Marcy-Holmes · Blocks from Dinkytown</p>
+        <h1>Elmwood Apartments: your U of M home.</h1>
+        <p class="lede">
+          Elmwood is the best place to live near the University of Minnesota — a few blocks
+          from campus, near Dinkytown, in the SE Como and Marcy-Holmes neighborhoods.
+        </p>
+        <ul class="hero__included">
+          {included.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="hero__note">
+          Included in rent for most apartments. Some residences include in-apartment laundry.
+          Our team cleans and sanitizes every building, every day.
+        </p>
+        <div class="hero__actions">
+          <a href="/apply" class="btn btn-primary">Apply Now</a>
+          <a href="/floor-plans" class="btn btn-outline">View Floor Plans</a>
+        </div>
+      </div>
+      <Photo label="Elmwood building exterior, SE Como" ratio="4 / 5" tone="forest" class="hero__photo" />
+    </div>
+  </section>
+
+  <Divider />
+
+  <section class="section">
+    <div class="wrap residences">
+      <div class="residences__text">
+        <p class="eyebrow">Elmwood Residences</p>
+        <h2>Studios to five-bedroom homes, all within walking distance of each other.</h2>
+        <p class="lede">
+          Studio, 1, 2, 3, 4, and 5 bedroom apartments and houses, all located in the SE Como
+          and Marcy-Holmes neighborhoods, near Van Cleve Park.
+        </p>
+        <a href="/floor-plans" class="text-link">See every floor plan and price →</a>
+        <div class="ada-callout" id="accessibility">
+          <p class="ada-callout__title">Accessible, ADA-compliant housing</p>
+          <p>
+            Several Elmwood residences are built for accessibility. Reach out to our office
+            to talk through what disability-compliant housing options we have available.
+          </p>
+          <a href="/contact" class="text-link">Talk to our leasing office →</a>
+        </div>
+      </div>
+      <Photo label="Studio interior, quarry tile floor" ratio="1 / 1" tone="sage" />
+    </div>
+  </section>
+
+  <section class="section section--sage">
+    <div class="wrap quality">
+      <div class="quality__text">
+        <p class="eyebrow">Elmwood Quality</p>
+        <h2>Real quality, at half the cost of the dorms.</h2>
+      </div>
+      <ul class="quality__list">
+        {qualityPoints.map((point) => <li>{point}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap convenience">
+      <Photo label="Walking to campus near Dinkytown" ratio="4 / 3" tone="brass" />
+      <div class="convenience__text">
+        <p class="eyebrow">Elmwood Convenience</p>
+        <h2>Walk or bike 15 minutes to campus.</h2>
+        <p class="lede">
+          Elmwood is close to all your favorite stores, restaurants, parks, and sports
+          activities — and the Metro Transit bus departs right from the corner, connecting
+          you anywhere around campus.
+        </p>
+        <ul class="convenience__list">
+          {landmarks.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrap security">
+      <p class="eyebrow">Elmwood Security</p>
+      <h2>You should never have to think twice about safety.</h2>
+      <ul class="security__list">
+        {securityPoints.map((point) => <li>{point}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap international">
+      <Photo label="International student move-in day" ratio="16 / 10" tone="sage" />
+      <div class="international__text">
+        <p class="eyebrow">Elmwood International</p>
+        <h2>Coming to the U of M from somewhere else? Welcome.</h2>
+        <p class="lede">
+          Elmwood welcomes international students attending the University of Minnesota.
+          Our office is used to helping students settle in from out of state and out of the
+          country alike — reach out with any questions before you arrive.
+        </p>
+        <a href="/contact" class="btn btn-outline">Contact the office</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section value">
+    <div class="wrap value__inner">
+      <p class="eyebrow">Elmwood Value</p>
+      <h2>Make the most of your U of M years.</h2>
+      <p class="lede value__lede">
+        Responsive management and well-maintained apartments mean a better quality of life,
+        without the dorm price tag. Get the best value and quality housing near campus —
+        and make the most of your University of Minnesota investment.
+      </p>
+      <div class="hero__actions">
+        <a href="/apply" class="btn btn-primary">Apply Now</a>
+        <a href="/floor-plans" class="btn btn-outline">See Pricing</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  .hero__copy h1 {
+    margin-block: 0.9rem 1.1rem;
+  }
+
+  .hero__included {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+
+  .hero__included li {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.45em 0.9em;
+    border: 1px solid var(--color-sage-line);
+    border-radius: 999px;
+    color: var(--color-forest);
+  }
+
+  .hero__note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    max-width: 32em;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .residences {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .residences__text .lede {
+    margin-block: 1.1rem 1.5rem;
+  }
+
+  .text-link {
+    display: inline-block;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-forest);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-forest);
+    padding-bottom: 2px;
+  }
+
+  .ada-callout {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--color-sage-line);
+    border-radius: var(--radius-md);
+    background: var(--color-sage);
+  }
+
+  .ada-callout__title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .ada-callout p {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.9rem;
+  }
+
+  .quality {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .quality__text h2 {
+    margin-top: 0.9rem;
+  }
+
+  .quality__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .quality__list li {
+    padding-left: 1.6rem;
+    position: relative;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .quality__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-forest);
+  }
+
+  .convenience {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .convenience__text h2 {
+    margin-block: 0.9rem 1rem;
+  }
+
+  .convenience__list {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem 1.5rem;
+  }
+
+  .convenience__list li {
+    font-size: 0.9375rem;
+    padding-left: 1.1rem;
+    position: relative;
+    color: var(--color-text-muted);
+  }
+
+  .convenience__list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-brass);
+  }
+
+  .security h2 {
+    margin-block: 0.9rem 2rem;
+    max-width: 30em;
+  }
+
+  .security__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 3rem;
+    max-width: 56rem;
+  }
+
+  .security__list li {
+    font-size: 1rem;
+    line-height: 1.6;
+    padding-left: 1.6rem;
+    position: relative;
+    color: var(--color-text-on-dark-muted);
+  }
+
+  .security__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-brass-light);
+  }
+
+  .international {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .international__text h2 {
+    margin-block: 0.9rem 1rem;
+  }
+
+  .international__text .lede {
+    margin-bottom: 1.75rem;
+  }
+
+  .value {
+    background: var(--color-forest);
+    color: var(--color-ivory);
+    text-align: center;
+  }
+
+  .value h2 {
+    color: var(--color-ivory);
+  }
+
+  .value .eyebrow {
+    color: var(--color-brass-light);
+  }
+
+  .value__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .value__lede {
+    color: rgba(252, 251, 244, 0.82);
+    max-width: 38em;
+  }
+
+  .value .hero__actions {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .value .btn-outline {
+    color: var(--color-ivory);
+    border-color: rgba(252, 251, 244, 0.5);
+  }
+
+  .value .btn-outline:hover {
+    background: rgba(252, 251, 244, 0.14);
+    color: var(--color-ivory);
+  }
+
+  @media (max-width: 56rem) {
+    .hero__grid,
+    .residences,
+    .quality,
+    .convenience,
+    .international {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__photo {
+      order: -1;
+    }
+
+    .security__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

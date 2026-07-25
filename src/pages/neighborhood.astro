@@ -1,0 +1,165 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Divider from "../components/Divider.astro";
+import Photo from "../components/Photo.astro";
+---
+
+<Layout
+  title="Neighborhood"
+  description="SE Como and Marcy-Holmes, Minneapolis — Elmwood's home turf, a short walk from the U of M and Dinkytown."
+>
+  <section class="section hero-sm">
+    <div class="wrap">
+      <p class="eyebrow">Neighborhood</p>
+      <h1>SE Como &amp; Marcy-Holmes, from people who actually live here.</h1>
+      <p class="lede">
+        Our office sits at 1420 Rollins Ave SE, and our seven buildings are all within about
+        a mile of it. We didn't pick this stretch of Southeast Minneapolis by accident — it's
+        the sweet spot between campus energy and an actual neighborhood.
+      </p>
+    </div>
+  </section>
+
+  <Divider />
+
+  <section class="section area">
+    <div class="wrap area__grid">
+      <Photo label="Dinkytown storefronts" ratio="4 / 3" tone="sage" />
+      <div>
+        <p class="eyebrow">Dinkytown</p>
+        <h2>The heart of it all is a short walk away.</h2>
+        <p class="lede">
+          Dinkytown has been the U of M's front porch for generations — coffee shops that
+          stay open through finals week, late-night food when the library kicks you out,
+          bookstores, and enough foot traffic that you'll run into someone you know most
+          days. Most Elmwood residences are close enough to walk it without a second thought.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sage area">
+    <div class="wrap area__grid area__grid--reverse">
+      <div>
+        <p class="eyebrow">Getting Around</p>
+        <h2>You don't need a car here.</h2>
+        <p class="lede">
+          East Bank campus is a 15 to 20 minute walk, or a quick bike ride, from most Elmwood
+          buildings. If the weather has other plans, the Metro Transit bus stops right at the
+          corner and connects you across campus and into the rest of the city. Covered bike
+          racks are on-site at our properties for the days you'd rather pedal.
+        </p>
+      </div>
+      <Photo label="Bike rack outside an Elmwood building" ratio="4 / 3" tone="brass" />
+    </div>
+  </section>
+
+  <section class="section area">
+    <div class="wrap area__grid">
+      <Photo label="Van Cleve Park in autumn" ratio="4 / 3" tone="sage" />
+      <div>
+        <p class="eyebrow">Parks &amp; Recreation</p>
+        <h2>Green space and game days, both close by.</h2>
+        <p class="lede">
+          Van Cleve Park anchors the SE Como side of the neighborhood — tennis courts, open
+          field, a rec center, and a genuinely good place to decompress between classes. On
+          the sports side, you're within easy reach of Bierman Field Athletic Complex,
+          U.S. Bank Stadium, and Mariucci Arena, so game day doesn't require a road trip.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sage area">
+    <div class="wrap area__grid area__grid--reverse">
+      <div>
+        <p class="eyebrow">Daily Life</p>
+        <h2>The errands take care of themselves.</h2>
+        <p class="lede">
+          Convenience stores and everyday shopping are close enough that you won't need to
+          plan a special trip. Families in the neighborhood also have the U of M daycare
+          center just one block from several of our buildings — a small detail that matters
+          a lot if it applies to you.
+        </p>
+      </div>
+      <Photo label="Corner store near campus" ratio="4 / 3" tone="brass" />
+    </div>
+  </section>
+
+  <section class="section cta">
+    <div class="wrap cta__inner">
+      <h2>Still deciding where to live this year?</h2>
+      <p class="lede cta__lede">
+        Come see the neighborhood in person — our office is a five-minute walk from most of
+        our buildings, and we're happy to show you around.
+      </p>
+      <div class="cta__actions">
+        <a href="/floor-plans" class="btn btn-primary">View Floor Plans</a>
+        <a href="/contact" class="btn btn-outline">Schedule a Visit</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sm h1 {
+    margin-block: 0.9rem 1rem;
+    max-width: 40rem;
+  }
+
+  .hero-sm .lede {
+    max-width: 38rem;
+  }
+
+  .area__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .area__grid--reverse {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+
+  .area__grid--reverse > *:first-child {
+    order: 2;
+  }
+
+  .area h2 {
+    margin-block: 0.9rem 1rem;
+  }
+
+  .cta {
+    text-align: center;
+  }
+
+  .cta h2 {
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+
+  .cta__lede {
+    margin: 1rem auto 0;
+    max-width: 30rem;
+  }
+
+  .cta__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 56rem) {
+    .area__grid,
+    .area__grid--reverse {
+      grid-template-columns: 1fr;
+    }
+
+    .area__grid--reverse > *:first-child {
+      order: 0;
+    }
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+interface Props {
+  label: string;
+  ratio?: string;
+  tone?: "sage" | "forest" | "brass";
+  class?: string;
+}
+
+const { label, ratio = "4 / 3", tone = "sage", class: className = "" } = Astro.props;
+---
+
+<figure class={`photo photo--${tone} ${className}`} style={`aspect-ratio: ${ratio};`}>
+  <svg class="photo__mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="4" y="8" width="40" height="32" rx="1.5" stroke-width="1.25" />
+    <circle cx="16" cy="19" r="3.25" stroke-width="1.25" />
+    <path d="M4 33 L17 23 L27 30 L34 24 L44 32" stroke-width="1.25" stroke-linejoin="round" />
+  </svg>
+  <figcaption class="photo__label">{label}</figcaption>
+</figure>
+
+<style>
+  .photo {
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .photo--sage {
+    background: linear-gradient(155deg, #eef0e2 0%, #dfe2cd 100%);
+  }
+
+  .photo--forest {
+    background: linear-gradient(155deg, #33591b 0%, #1f3a10 100%);
+  }
+
+  .photo--brass {
+    background: linear-gradient(155deg, #cbae7c 0%, #a4813a 100%);
+  }
+
+  .photo__mark {
+    width: 2rem;
+    height: 2rem;
+    stroke: rgba(22, 25, 21, 0.28);
+    opacity: 0.8;
+  }
+
+  .photo--forest .photo__mark,
+  .photo--brass .photo__mark {
+    stroke: rgba(252, 251, 244, 0.55);
+  }
+
+  .photo__label {
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    font-style: italic;
+    font-family: var(--font-display);
+    color: rgba(22, 25, 21, 0.45);
+    padding-inline: 1rem;
+  }
+
+  .photo--forest .photo__label,
+  .photo--brass .photo__label {
+    color: rgba(252, 251, 244, 0.7);
+  }
+</style>

@@ -1,0 +1,199 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Divider from "../components/Divider.astro";
+
+const categories = [
+  {
+    title: "New This Year",
+    items: ["Utilities included in rent", "Free parking in all apartments", "Free wifi in all apartments"],
+  },
+  {
+    title: "Near the U of M",
+    items: [
+      "15–20 minute walk to East Bank campus",
+      "Metro Transit bus stop right at the corner",
+      "Convenience stores and shopping nearby",
+      "Covered bike racks on-site",
+    ],
+  },
+  {
+    title: "Clean",
+    items: ["Hygienic quarry tile floors — no carpet stains, no mold", "Buildings cleaned and sanitized daily"],
+  },
+  {
+    title: "Service",
+    items: ["A real person answers the phone", "Immediate maintenance response, 24/7"],
+  },
+  {
+    title: "Secure",
+    items: [
+      "Security key control system",
+      "Internet webcam surveillance",
+      "Keyless security bolts",
+      "Entire property illuminated at night",
+    ],
+  },
+  {
+    title: "In Every Home",
+    items: [
+      "Air conditioning",
+      "Ceiling fans",
+      "Internet and cable ready",
+      "Washer and dryer",
+      "Dishwasher",
+      "Double-sink bath vanities",
+    ],
+  },
+];
+---
+
+<Layout
+  title="Amenities"
+  description="Everything included at Elmwood — from free parking and wifi to daily cleaning, 24/7 maintenance, and security across all seven buildings."
+>
+  <section class="section hero-sm">
+    <div class="wrap">
+      <p class="eyebrow">Amenities</p>
+      <h1>Everything's included, so you don't have to think about it.</h1>
+      <p class="lede">
+        Rent at Elmwood covers more than a roof. Here's everything that comes with your
+        apartment or house — no separate accounts to set up, no surprise bills.
+      </p>
+    </div>
+  </section>
+
+  <Divider />
+
+  <section class="section">
+    <div class="wrap grid">
+      {
+        categories.map((category) => (
+          <div class="card">
+            <h3>{category.title}</h3>
+            <ul>
+              {category.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--sage" id="accessibility">
+    <div class="wrap access">
+      <p class="eyebrow">Accessibility</p>
+      <h2>ADA-compliant, disability-accessible housing.</h2>
+      <p class="lede">
+        A number of Elmwood units are built and maintained to ADA accessibility standards,
+        including step-free entries and adapted bathrooms. Availability varies by building,
+        so the best next step is a conversation — tell us what you need, and our office will
+        walk you through which residences fit.
+      </p>
+      <a href="/contact" class="btn btn-outline">Talk to our leasing office</a>
+    </div>
+  </section>
+
+  <section class="section cta">
+    <div class="wrap cta__inner">
+      <h2>One block from the U of M daycare center, minutes from everything else.</h2>
+      <div class="cta__actions">
+        <a href="/floor-plans" class="btn btn-primary">View Floor Plans</a>
+        <a href="/apply" class="btn btn-outline">Apply Now</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sm h1 {
+    margin-block: 0.9rem 1rem;
+    max-width: 34rem;
+  }
+
+  .hero-sm .lede {
+    max-width: 36rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card {
+    padding: 2rem 1.75rem;
+    border: 1px solid var(--color-sage-line);
+    border-radius: var(--radius-md);
+    background: var(--color-ivory);
+  }
+
+  .card h3 {
+    margin-bottom: 1.1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-sage-line);
+  }
+
+  .card ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .card li {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    padding-left: 1.1rem;
+    position: relative;
+    color: var(--color-text-muted);
+  }
+
+  .card li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-brass);
+  }
+
+  .access {
+    max-width: 42rem;
+  }
+
+  .access h2 {
+    margin-block: 0.9rem 1rem;
+  }
+
+  .access .lede {
+    margin-bottom: 1.75rem;
+  }
+
+  .cta {
+    text-align: center;
+  }
+
+  .cta h2 {
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  .cta__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 56rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
