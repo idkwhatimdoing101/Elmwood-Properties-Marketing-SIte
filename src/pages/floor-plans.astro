@@ -1,14 +1,16 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
 import { buildings, unitTypes, startingPrice, bedLabel, fmt } from "../data/floorplans";
+import { buildingPhotos } from "../data/buildingPhotos";
 import { calendlyUrl } from "../data/site";
 ---
 
 <Layout
   title="Floor Plans"
-  description="Studio through 5-bedroom apartments and houses at Elmwood, in the SE Como and Marcy-Holmes neighborhoods of Minneapolis, MN — minutes from the University of Minnesota (U of M). See current pricing by building."
+  description="Studio through 5-bedroom apartments and houses at Elmwood, in the SE Como and Marcy-Holmes neighborhoods of Minneapolis, MN — minutes from the University of Minnesota (U of M). See current pricing and browse all seven buildings."
 >
   <section class="section hero-sm">
     <div class="wrap">
@@ -61,24 +63,42 @@ import { calendlyUrl } from "../data/site";
   <section class="section section--sage">
     <div class="wrap">
       <p class="eyebrow">By Building</p>
-      <h2 class="table-heading">Seven buildings, all with the same pricing.</h2>
+      <h2 class="table-heading">Seven buildings, one office.</h2>
       <p class="lede table-lede">
         All seven Elmwood buildings sit in the SE Como and Marcy-Holmes neighborhoods of
-        Minneapolis, MN, within about a mile of the University of Minnesota campus, and follow
-        the same pricing above. Pick a building below for photos, availability, and what makes
-        that address different.
+        Minneapolis, MN, within about a mile of the University of Minnesota campus. Pick a
+        building below for photos, availability, and what makes that address different.
       </p>
 
       <ul class="building-list">
         {
-          buildings.map((b) => (
-            <li class="building-card">
-              <a href={`/buildings/${b.slug}`} class="building-card__link">
-                <h3 class="building-card__address">{b.address}, Minneapolis, MN</h3>
-                <span class="text-link">See building details →</span>
-              </a>
-            </li>
-          ))
+          buildings.map((b) => {
+            const exterior = buildingPhotos[b.slug]?.find((p) => p.category === "exterior");
+            return (
+              <li class="building-card">
+                <a href={`/buildings/${b.slug}`} class="building-card__link">
+                  {
+                    exterior ? (
+                      <Image
+                        src={exterior.src}
+                        alt={`Exterior of ${b.address}, Minneapolis, MN`}
+                        widths={[300, 600, 900]}
+                        sizes="(max-width: 64rem) 50vw, 33vw"
+                        loading="lazy"
+                        class="building-card__img"
+                      />
+                    ) : (
+                      <Photo label={`${b.address} exterior`} ratio="4 / 3" tone="forest" />
+                    )
+                  }
+                  <div class="building-card__body">
+                    <h3 class="building-card__address">{b.address}, Minneapolis, MN</h3>
+                    <span class="text-link">See building details →</span>
+                  </div>
+                </a>
+              </li>
+            );
+          })
         }
       </ul>
     </div>
@@ -183,6 +203,7 @@ import { calendlyUrl } from "../data/site";
     background: var(--color-ivory);
     border: 1px solid var(--color-sage-line);
     border-radius: var(--radius-md);
+    overflow: hidden;
     transition: border-color 0.2s ease;
   }
 
@@ -193,9 +214,22 @@ import { calendlyUrl } from "../data/site";
   .building-card__link {
     display: flex;
     flex-direction: column;
+    text-decoration: none;
+  }
+
+  .building-card__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  .building-card__body {
+    display: flex;
+    flex-direction: column;
     gap: 0.75rem;
     padding: 1.5rem;
-    text-decoration: none;
   }
 
   .building-card__address {
