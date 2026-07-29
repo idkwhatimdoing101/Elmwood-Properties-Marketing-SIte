@@ -1,45 +1,42 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
-import Photo from "../components/Photo.astro";
+import { buildingContent } from "../data/buildings";
+import { buildingPhotos } from "../data/buildingPhotos";
+import { calendlyUrl } from "../data/site";
 
-const photos = [
-  { label: "Studio living space", category: "interiors", tone: "sage", ratio: "4 / 5", tall: true },
-  { label: "Kitchen with dishwasher", category: "interiors", tone: "brass", ratio: "4 / 3" },
-  { label: "Quarry tile bathroom", category: "interiors", tone: "sage", ratio: "4 / 3" },
-  { label: "Double-sink vanity", category: "interiors", tone: "brass", ratio: "1 / 1" },
-  { label: "Bedroom, natural light", category: "interiors", tone: "sage", ratio: "4 / 5", tall: true },
-  { label: "Covered bike storage", category: "amenities", tone: "brass", ratio: "4 / 3" },
-  { label: "In-building laundry", category: "amenities", tone: "sage", ratio: "1 / 1" },
-  { label: "Secured entry", category: "amenities", tone: "brass", ratio: "4 / 3" },
-  { label: "Building exterior, SE Como", category: "exteriors", tone: "forest", ratio: "4 / 5", tall: true },
-  { label: "Front entrance, evening light", category: "exteriors", tone: "forest", ratio: "4 / 3" },
-  { label: "Elmwood house, Marcy-Holmes", category: "exteriors", tone: "sage", ratio: "4 / 3" },
-  { label: "Van Cleve Park, nearby", category: "neighborhood", tone: "sage", ratio: "4 / 3" },
-  { label: "Dinkytown storefronts", category: "neighborhood", tone: "brass", ratio: "1 / 1" },
-  { label: "Walk to campus", category: "neighborhood", tone: "sage", ratio: "4 / 5", tall: true },
-];
+const categoryLabel = { exterior: "exteriors", interior: "interiors", amenity: "amenities" } as const;
+
+const photos = buildingContent.flatMap((building) =>
+  (buildingPhotos[building.slug] ?? [])
+    .filter((photo) => photo.category !== "floorplan")
+    .map((photo) => ({
+      src: photo.src,
+      category: categoryLabel[photo.category as "exterior" | "interior" | "amenity"],
+      alt: `${photo.label} at ${building.address}, Minneapolis, MN`,
+    })),
+);
 
 const filters = [
   { key: "all", label: "All" },
   { key: "interiors", label: "Interiors" },
   { key: "amenities", label: "Amenities" },
   { key: "exteriors", label: "Exteriors" },
-  { key: "neighborhood", label: "Neighborhood" },
 ];
 ---
 
 <Layout
   title="Gallery"
-  description="A look inside Elmwood's apartments, buildings, and the SE Como and Marcy-Holmes neighborhoods that surround them."
+  description="Real photos of Elmwood's apartments, buildings, and the SE Como and Marcy-Holmes neighborhoods near the University of Minnesota."
 >
   <section class="section hero-sm">
     <div class="wrap">
       <p class="eyebrow">Gallery</p>
       <h1>A look inside, before you visit.</h1>
       <p class="lede">
-        Real photos of our units, buildings, and the neighborhood are on the way. In the
-        meantime, here's how the collection will be organized.
+        Real photos of our units, buildings, and floor plans across every Elmwood address in SE
+        Como and Marcy-Holmes.
       </p>
     </div>
   </section>
@@ -65,9 +62,16 @@ const filters = [
 
       <div class="gallery-grid" id="gallery-grid">
         {
-          photos.map((photo) => (
-            <div class={`gallery-item ${photo.tall ? "gallery-item--tall" : ""}`} data-category={photo.category}>
-              <Photo label={photo.label} ratio={photo.ratio} tone={photo.tone as "sage" | "forest" | "brass"} />
+          photos.map((photo, i) => (
+            <div class="gallery-item" data-category={photo.category}>
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                widths={[300, 600, 900]}
+                sizes="(max-width: 30rem) 100vw, (max-width: 56rem) 50vw, 25vw"
+                loading={i < 4 ? "eager" : "lazy"}
+                class="gallery-item__img"
+              />
             </div>
           ))
         }
@@ -79,7 +83,7 @@ const filters = [
     <div class="wrap cta__inner">
       <h2>Prefer to see it in person?</h2>
       <div class="cta__actions">
-        <a href="/contact" class="btn btn-primary">Schedule a Tour</a>
+        <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-primary">Schedule a Tour</a>
         <a href="/floor-plans" class="btn btn-outline">View Floor Plans</a>
       </div>
     </div>
@@ -150,12 +154,13 @@ const filters = [
     gap: 1.25rem;
   }
 
-  .gallery-item--tall {
-    grid-row: span 2;
-  }
-
-  .gallery-item--tall :global(.photo) {
+  .gallery-item__img {
+    width: 100%;
     height: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
   }
 
   @media (max-width: 56rem) {
@@ -167,10 +172,6 @@ const filters = [
   @media (max-width: 30rem) {
     .gallery-grid {
       grid-template-columns: 1fr;
-    }
-
-    .gallery-item--tall {
-      grid-row: auto;
     }
   }
 

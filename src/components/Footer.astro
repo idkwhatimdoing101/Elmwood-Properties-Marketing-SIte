@@ -1,4 +1,6 @@
 ---
+import { calendlyUrl } from "../data/site";
+
 const year = new Date().getFullYear();
 ---
 
@@ -29,7 +31,7 @@ const year = new Date().getFullYear();
     <nav class="footer__col" aria-label="Get started">
       <p class="footer__heading">Get Started</p>
       <ul>
-        <li><a href="/apply">Apply Now</a></li>
+        <li><a href={calendlyUrl} target="_blank" rel="noopener">Book a Tour</a></li>
         <li><a href="/contact">Contact the Office</a></li>
         <li><a href="/maintenance-request">Maintenance Request</a></li>
       </ul>

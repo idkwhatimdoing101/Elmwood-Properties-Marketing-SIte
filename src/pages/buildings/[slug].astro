@@ -1,0 +1,280 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../../layouts/Layout.astro";
+import Divider from "../../components/Divider.astro";
+import Photo from "../../components/Photo.astro";
+import { buildingContent, type BuildingContent } from "../../data/buildings";
+import { buildingPhotos } from "../../data/buildingPhotos";
+import { calendlyUrl } from "../../data/site";
+
+export function getStaticPaths() {
+  return buildingContent.map((building) => ({
+    params: { slug: building.slug },
+    props: { building },
+  }));
+}
+
+interface Props {
+  building: BuildingContent;
+}
+
+const { building } = Astro.props;
+
+const photos = buildingPhotos[building.slug] ?? [];
+const exterior = photos.find((p) => p.category === "exterior");
+const gallery = photos.filter((p) => p.category === "interior" || p.category === "amenity");
+const floorplans = photos.filter((p) => p.category === "floorplan");
+
+const residenceSchema = {
+  "@context": "https://schema.org",
+  "@type": "ApartmentComplex",
+  name: building.name,
+  description: building.heroDescription,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: building.address,
+    addressLocality: "Minneapolis",
+    addressRegion: "MN",
+    postalCode: "55414",
+    addressCountry: "US",
+  },
+  areaServed: ["University of Minnesota", "SE Como", "Marcy-Holmes", "Dinkytown", "Minneapolis, MN"],
+};
+---
+
+<Layout title={building.name} description={building.heroDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(residenceSchema)} />
+
+  <section class="section hero-sm">
+    <div class="wrap">
+      <p class="eyebrow">SE Como · Minneapolis, MN · Near the U of M</p>
+      <h1>{building.address}</h1>
+      <p class="lede">{building.heroDescription}</p>
+      <div class="hero-actions">
+        <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-primary">Book a Tour</a>
+        <a href="/floor-plans" class="btn btn-outline">View Floor Plans &amp; Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <Divider />
+
+  <section class="section">
+    <div class="wrap building-grid">
+      {
+        exterior ? (
+          <Image
+            src={exterior.src}
+            alt={`Exterior of ${building.address}, Minneapolis, MN`}
+            widths={[400, 800, 1200]}
+            sizes="(max-width: 56rem) 100vw, 45vw"
+            loading="eager"
+            class="building-photo"
+          />
+        ) : (
+          <Photo label={`${building.address} exterior`} ratio="4 / 3" tone="forest" />
+        )
+      }
+      <div class="building-text">
+        <p class="eyebrow">About This Building</p>
+        <h2>{building.name}</h2>
+        <p class="lede">{building.overview}</p>
+        {
+          building.highlights.length > 0 && (
+            <ul class="highlights">
+              {building.highlights.map((h) => <li>{h}</li>)}
+            </ul>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    gallery.length > 0 && (
+      <section class="section section--sage">
+        <div class="wrap">
+          <p class="eyebrow">Photos</p>
+          <h2 class="photos-heading">Inside {building.address}.</h2>
+          <div class="photo-grid">
+            {gallery.map((photo) => (
+              <Image
+                src={photo.src}
+                alt={`${photo.label} at ${building.address}, Minneapolis, MN`}
+                widths={[300, 600, 900]}
+                sizes="(max-width: 30rem) 100vw, (max-width: 56rem) 50vw, 33vw"
+                loading="lazy"
+                class="photo-grid__img"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    floorplans.length > 0 && (
+      <section class="section">
+        <div class="wrap">
+          <p class="eyebrow">Floor Plans</p>
+          <h2 class="photos-heading">Layouts available at this address.</h2>
+          <div class="photo-grid photo-grid--floorplans">
+            {floorplans.map((photo) => (
+              <Image
+                src={photo.src}
+                alt={`Floor plan diagram for ${building.address}, Minneapolis, MN`}
+                widths={[400, 800]}
+                sizes="(max-width: 30rem) 100vw, (max-width: 56rem) 50vw, 33vw"
+                loading="lazy"
+                class="photo-grid__img photo-grid__img--floorplan"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section cta">
+    <div class="wrap cta__inner">
+      <h2>See {building.address} in person.</h2>
+      <p class="lede cta__lede">
+        Book a tour of this building, or browse every Elmwood floor plan and price.
+      </p>
+      <div class="cta__actions">
+        <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-primary">Book a Tour</a>
+        <a href="/floor-plans" class="btn btn-outline">View Floor Plans</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sm h1 {
+    margin-block: 0.9rem 1rem;
+    max-width: 34rem;
+  }
+
+  .hero-sm .lede {
+    max-width: 36rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.75rem;
+  }
+
+  .building-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .building-photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+
+  .building-text h2 {
+    margin-block: 0.9rem 1rem;
+  }
+
+  .highlights {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .highlights li {
+    padding-left: 1.6rem;
+    position: relative;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .highlights li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-forest);
+  }
+
+  .photos-heading {
+    margin-block: 0.9rem 1.75rem;
+  }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .photo-grid--floorplans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .photo-grid__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-sage-line);
+  }
+
+  .photo-grid__img--floorplan {
+    object-fit: contain;
+    background: var(--color-ivory);
+    aspect-ratio: 4 / 3;
+  }
+
+  .cta {
+    text-align: center;
+  }
+
+  .cta h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  .cta__lede {
+    margin-inline: auto;
+    max-width: 30rem;
+  }
+
+  .cta__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 56rem) {
+    .building-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .photo-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .photo-grid,
+    .photo-grid--floorplans {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -5,6 +5,7 @@ import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
 import FloorplanCarousel from "../components/FloorplanCarousel.astro";
 import elmwoodHero from "../assets/images/elmwood-hero.jpg";
+import { calendlyUrl } from "../data/site";
 
 const included = ["Parking", "Internet", "Water", "Bicycle Storage"];
 
@@ -67,7 +68,7 @@ const landmarks = [
             Our team cleans and sanitizes every building, every day.
           </p>
           <div class="hero__actions">
-            <a href="/apply" class="btn btn-primary">Apply Now</a>
+            <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-primary">Book a Tour</a>
             <a href="/floor-plans" class="btn btn-outline">View Floor Plans</a>
           </div>
         </div>
@@ -168,7 +169,7 @@ const landmarks = [
         and make the most of your University of Minnesota investment.
       </p>
       <div class="hero__actions">
-        <a href="/apply" class="btn btn-primary">Apply Now</a>
+        <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-primary">Book a Tour</a>
         <a href="/floor-plans" class="btn btn-outline">See Pricing</a>
       </div>
     </div>

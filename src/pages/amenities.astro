@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
+import { calendlyUrl } from "../data/site";
 
 const categories = [
   {
@@ -100,7 +101,7 @@ const categories = [
       <h2>One block from the U of M daycare center, minutes from everything else.</h2>
       <div class="cta__actions">
         <a href="/floor-plans" class="btn btn-primary">View Floor Plans</a>
-        <a href="/apply" class="btn btn-outline">Apply Now</a>
+        <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-outline">Book a Tour</a>
       </div>
     </div>
   </section>

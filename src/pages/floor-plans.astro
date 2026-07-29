@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
 import { buildings, unitTypes, startingPrice, bedLabel, fmt } from "../data/floorplans";
+import { calendlyUrl } from "../data/site";
 ---
 
 <Layout
@@ -36,8 +37,8 @@ import { buildings, unitTypes, startingPrice, bedLabel, fmt } from "../data/floo
                 <p class="plan-card__price">
                   {price ? `Starting at ${fmt(price)}/mo` : "Contact us for current pricing"}
                 </p>
-                <a href="/apply" class="btn btn-outline plan-card__cta">
-                  Apply for this floor plan
+                <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-outline plan-card__cta">
+                  Book a Tour
                 </a>
               </div>
             </div>
@@ -60,34 +61,24 @@ import { buildings, unitTypes, startingPrice, bedLabel, fmt } from "../data/floo
   <section class="section section--sage">
     <div class="wrap">
       <p class="eyebrow">By Building</p>
-      <h2 class="table-heading">Current pricing, address by address.</h2>
+      <h2 class="table-heading">Seven buildings, all with the same pricing.</h2>
       <p class="lede table-lede">
         All seven Elmwood buildings sit in the SE Como and Marcy-Holmes neighborhoods of
-        Minneapolis, MN, within about a mile of the University of Minnesota campus. Pricing
-        shown as of July 2026 and subject to change — call or apply to confirm what's actually
-        available right now.
+        Minneapolis, MN, within about a mile of the University of Minnesota campus, and follow
+        the same pricing above. Pick a building below for photos, availability, and what makes
+        that address different.
       </p>
 
       <ul class="building-list">
         {
-          buildings.map((b) => {
-            const available = unitTypes.filter((type) => b[type.key] !== null);
-            return (
-              <li class="building-card">
+          buildings.map((b) => (
+            <li class="building-card">
+              <a href={`/buildings/${b.slug}`} class="building-card__link">
                 <h3 class="building-card__address">{b.address}, Minneapolis, MN</h3>
-                <ul class="building-card__prices">
-                  {
-                    available.map((type) => (
-                      <li>
-                        <span class="building-card__type">{type.name}</span>
-                        <span class="building-card__price">{fmt(b[type.key])}/mo</span>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </li>
-            );
-          })
+                <span class="text-link">See building details →</span>
+              </a>
+            </li>
+          ))
         }
       </ul>
     </div>
@@ -99,7 +90,7 @@ import { buildings, unitTypes, startingPrice, bedLabel, fmt } from "../data/floo
       <p class="lede cta__lede">Parking, internet, water, and bicycle storage — see the full list on Amenities.</p>
       <div class="cta__actions">
         <a href="/amenities" class="btn btn-primary">View Amenities</a>
-        <a href="/apply" class="btn btn-outline">Apply Now</a>
+        <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-outline">Book a Tour</a>
       </div>
     </div>
   </section>
@@ -189,47 +180,27 @@ import { buildings, unitTypes, startingPrice, bedLabel, fmt } from "../data/floo
   }
 
   .building-card {
-    padding: 1.5rem;
     background: var(--color-ivory);
     border: 1px solid var(--color-sage-line);
     border-radius: var(--radius-md);
+    transition: border-color 0.2s ease;
+  }
+
+  .building-card:hover {
+    border-color: var(--color-forest);
+  }
+
+  .building-card__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    text-decoration: none;
   }
 
   .building-card__address {
     font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .building-card__prices {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .building-card__prices li {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    padding-top: 0.6rem;
-    border-top: 1px solid var(--color-sage-line);
-    font-size: 0.9375rem;
-  }
-
-  .building-card__prices li:first-child {
-    padding-top: 0;
-    border-top: none;
-  }
-
-  .building-card__type {
-    color: var(--color-text-muted);
-  }
-
-  .building-card__price {
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    color: var(--color-forest-deep);
-    white-space: nowrap;
+    color: var(--color-charcoal);
   }
 
   @media (max-width: 64rem) {
