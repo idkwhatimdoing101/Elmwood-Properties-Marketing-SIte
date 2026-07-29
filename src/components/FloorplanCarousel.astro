@@ -1,13 +1,15 @@
 ---
+import { Image } from "astro:assets";
 import Photo from "./Photo.astro";
 import { unitTypes, startingPrice, fmt } from "../data/floorplans";
+import { buildingPhotos } from "../data/buildingPhotos";
 ---
 
 <section class="section floorplan-carousel">
   <div class="wrap floorplan-carousel__head">
     <div>
       <p class="eyebrow">Floor Plans &amp; Pricing</p>
-      <h2>Studio through five bedroom, priced and ready.</h2>
+      <h2>Studios to four beds- floorplans for every budget!</h2>
     </div>
     <div class="floorplan-carousel__nav">
       <button type="button" class="carousel-btn" id="fp-prev" aria-label="Previous floor plan">‹</button>
@@ -20,9 +22,23 @@ import { unitTypes, startingPrice, fmt } from "../data/floorplans";
       {
         unitTypes.map((type) => {
           const price = startingPrice(type.key);
+          const photo = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "exterior");
           return (
             <li class="floorplan-carousel__slide">
-              <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
+              {
+                photo ? (
+                  <Image
+                    src={photo.src}
+                    alt={`${type.name} apartment building exterior, Minneapolis, MN`}
+                    widths={[300, 600, 900]}
+                    sizes="(max-width: 30rem) 78vw, 17rem"
+                    loading="lazy"
+                    class="floorplan-carousel__img"
+                  />
+                ) : (
+                  <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
+                )
+              }
               <h3>{type.name}</h3>
               <p class="floorplan-carousel__price">
                 {price ? `Starting at ${fmt(price)}/mo` : "Contact for pricing"}
@@ -125,6 +141,15 @@ import { unitTypes, startingPrice, fmt } from "../data/floorplans";
 
   .floorplan-carousel__slide h3 {
     margin-top: 1rem;
+  }
+
+  .floorplan-carousel__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
   }
 
   .floorplan-carousel__price {
