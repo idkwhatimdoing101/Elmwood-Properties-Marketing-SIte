@@ -5,6 +5,8 @@ import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
 import FloorplanCarousel from "../components/FloorplanCarousel.astro";
 import elmwoodHero from "../assets/images/elmwood-hero.jpg";
+import dinkytownPhoto from "../assets/images/dinkytown.jpg";
+import mspTerminalPhoto from "../assets/images/msp-terminal-2.jpg";
 import { calendlyUrl } from "../data/site";
 
 const included = ["Parking", "Internet", "Water", "Bicycle Storage"];
@@ -84,9 +86,9 @@ const landmarks = [
     <div class="wrap residences">
       <div class="residences__text">
         <p class="eyebrow">Elmwood Residences</p>
-        <h2>Studios to five-bedroom homes, all within walking distance of each other.</h2>
+        <h2>Studios to four-bedroom homes, all within walking distance of each other.</h2>
         <p class="lede">
-          Studio, 1, 2, 3, 4, and 5 bedroom apartments and houses, all located in the SE Como
+          Studio, 1, 2, 3, and 4 bedroom apartments and houses, all located in the SE Como
           and Marcy-Holmes neighborhoods, near Van Cleve Park.
         </p>
         <a href="/floor-plans" class="text-link">See every floor plan and price →</a>
@@ -117,7 +119,14 @@ const landmarks = [
 
   <section class="section">
     <div class="wrap convenience">
-      <Photo label="Walking to campus near Dinkytown" ratio="4 / 3" tone="brass" />
+      <Image
+        src={dinkytownPhoto}
+        alt="Dinkytown shops and restaurants near the University of Minnesota"
+        widths={[400, 800, 1200]}
+        sizes="(max-width: 56rem) 100vw, 45vw"
+        loading="lazy"
+        class="convenience__img"
+      />
       <div class="convenience__text">
         <p class="eyebrow">Elmwood Convenience</p>
         <h2>Walk or bike 15 minutes to campus.</h2>
@@ -145,7 +154,14 @@ const landmarks = [
 
   <section class="section">
     <div class="wrap international">
-      <Photo label="International student move-in day" ratio="16 / 10" tone="sage" />
+      <Image
+        src={mspTerminalPhoto}
+        alt="MSP Airport, where many international students arrive in Minneapolis"
+        widths={[500, 900, 1400]}
+        sizes="(max-width: 56rem) 100vw, 50vw"
+        loading="lazy"
+        class="international__img"
+      />
       <div class="international__text">
         <p class="eyebrow">Elmwood International</p>
         <h2>Coming to the U of M from somewhere else? Welcome.</h2>
@@ -361,6 +377,15 @@ const landmarks = [
     align-items: center;
   }
 
+  .convenience__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
+  }
+
   .convenience__text h2 {
     margin-block: 0.9rem 1rem;
   }
@@ -422,6 +447,15 @@ const landmarks = [
     grid-template-columns: 0.9fr 1.1fr;
     gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
+  }
+
+  .international__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
   }
 
   .international__text h2 {

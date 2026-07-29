@@ -10,55 +10,20 @@ import { calendlyUrl } from "../data/site";
 
 <Layout
   title="Floor Plans"
-  description="Studio through 5-bedroom apartments and houses at Elmwood, in the SE Como and Marcy-Holmes neighborhoods of Minneapolis, MN — minutes from the University of Minnesota (U of M). See current pricing and browse all seven buildings."
+  description="Studio through 4-bedroom apartments and houses at Elmwood, in the SE Como and Marcy-Holmes neighborhoods of Minneapolis, MN — minutes from the University of Minnesota (U of M). See current pricing and browse all seven buildings."
 >
   <section class="section hero-sm">
     <div class="wrap">
       <p class="eyebrow">Floor Plans</p>
-      <h1>Six sizes, one standard of upkeep.</h1>
+      <h1>Shop by floorplan or building</h1>
       <p class="lede">
-        From a studio to a five-bedroom house, every Elmwood residence gets the same quarry
+        From a studio to a four-bedroom house, every Elmwood residence gets the same quarry
         tile floors, the same 24/7 maintenance, and the same team answering the phone.
       </p>
     </div>
   </section>
 
   <Divider />
-
-  <section class="section">
-    <div class="wrap plans-grid">
-      {
-        unitTypes.map((type) => {
-          const price = startingPrice(type.key);
-          return (
-            <div class="plan-card" id={type.key}>
-              <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
-              <div class="plan-card__body">
-                <h3>{type.name}</h3>
-                <p class="plan-card__meta">{bedLabel(type.beds)}</p>
-                <p class="plan-card__price">
-                  {price ? `Starting at ${fmt(price)}/mo` : "Contact us for current pricing"}
-                </p>
-                <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-outline plan-card__cta">
-                  Book a Tour
-                </a>
-              </div>
-            </div>
-          );
-        })
-      }
-    </div>
-
-    <div class="wrap houses-note">
-      <p class="eyebrow">Looking for a house instead?</p>
-      <p class="lede">
-        Several of our 3, 4, and 5 bedroom floor plans are full houses, not apartment units —
-        same SE Como and Marcy-Holmes neighborhoods, same Elmwood upkeep. Let us know what
-        you're looking for and we'll tell you what's available.
-      </p>
-      <a href="/contact" class="text-link">Ask about house availability →</a>
-    </div>
-  </section>
 
   <section class="section section--sage">
     <div class="wrap">
@@ -104,6 +69,55 @@ import { calendlyUrl } from "../data/site";
     </div>
   </section>
 
+  <section class="section">
+    <div class="wrap plans-grid">
+      {
+        unitTypes.map((type) => {
+          const price = startingPrice(type.key);
+          const photo = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "exterior");
+          return (
+            <div class="plan-card" id={type.key}>
+              {
+                photo ? (
+                  <Image
+                    src={photo.src}
+                    alt={`${type.name} apartment building exterior, Minneapolis, MN`}
+                    widths={[300, 600, 900]}
+                    sizes="(max-width: 56rem) 50vw, 33vw"
+                    loading="lazy"
+                    class="plan-card__img"
+                  />
+                ) : (
+                  <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
+                )
+              }
+              <div class="plan-card__body">
+                <h3>{type.name}</h3>
+                <p class="plan-card__meta">{bedLabel(type.beds)}</p>
+                <p class="plan-card__price">
+                  {price ? `Starting at ${fmt(price)}/mo` : "Contact us for current pricing"}
+                </p>
+                <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-outline plan-card__cta">
+                  Book a Tour
+                </a>
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <div class="wrap houses-note">
+      <p class="eyebrow">Looking for a house instead?</p>
+      <p class="lede">
+        Several of our 3 and 4 bedroom floor plans are full houses, not apartment units —
+        same SE Como and Marcy-Holmes neighborhoods, same Elmwood upkeep. Let us know what
+        you're looking for and we'll tell you what's available.
+      </p>
+      <a href="/contact" class="text-link">Ask about house availability →</a>
+    </div>
+  </section>
+
   <section class="section cta">
     <div class="wrap cta__inner">
       <h2>Included in rent for most apartments</h2>
@@ -139,6 +153,14 @@ import { calendlyUrl } from "../data/site";
     overflow: hidden;
     background: var(--color-ivory);
     scroll-margin-top: 7rem;
+  }
+
+  .plan-card__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
   }
 
   .plan-card__body {
