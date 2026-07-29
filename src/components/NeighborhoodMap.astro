@@ -1,0 +1,147 @@
+---
+import "leaflet/dist/leaflet.css";
+---
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow">Neighborhood</p>
+    <h2>Find every Elmwood building.</h2>
+    <p class="lede">
+      All seven buildings, the U of M campus, and the nearest bus stops — pan and zoom to
+      explore SE Como and Marcy-Holmes.
+    </p>
+
+    <div id="elmwood-map" class="elmwood-map" role="application" aria-label="Map of Elmwood buildings near the University of Minnesota"></div>
+
+    <ul class="map-legend">
+      <li><span class="map-legend__dot map-legend__dot--building"></span> Elmwood building</li>
+      <li><span class="map-legend__dot map-legend__dot--umn"></span> University of Minnesota</li>
+      <li><span class="map-legend__dot map-legend__dot--bus"></span> Bus stop</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+  import L from "leaflet";
+  import { mapPoints } from "../data/mapPoints";
+
+  const el = document.getElementById("elmwood-map");
+  if (el) {
+    const map = L.map(el, { scrollWheelZoom: false });
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+    }).addTo(map);
+
+    const icons = {
+      building: L.divIcon({ className: "map-pin map-pin--building", iconSize: [16, 16] }),
+      umn: L.divIcon({ className: "map-pin map-pin--umn", iconSize: [16, 16] }),
+      bus: L.divIcon({ className: "map-pin map-pin--bus", iconSize: [12, 12] }),
+    };
+
+    const markers = mapPoints.map((point) => {
+      const marker = L.marker([point.lat, point.lng], { icon: icons[point.type] }).addTo(map);
+      const popup = point.href
+        ? `<strong>${point.label}</strong><br/><a href="${point.href}">See building details →</a>`
+        : `<strong>${point.label}</strong>`;
+      marker.bindPopup(popup);
+      return marker;
+    });
+
+    const group = L.featureGroup(markers);
+    map.invalidateSize();
+    map.fitBounds(group.getBounds().pad(0.12), { maxZoom: 16 });
+
+    requestAnimationFrame(() => {
+      map.invalidateSize();
+      map.fitBounds(group.getBounds().pad(0.12), { maxZoom: 16 });
+    });
+  }
+</script>
+
+<style>
+  .elmwood-map {
+    margin-top: 2rem;
+    height: 28rem;
+    width: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-sage-line);
+    background: var(--color-sage);
+  }
+
+  .map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .map-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .map-legend__dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--color-ivory);
+    box-shadow: 0 0 0 1px var(--color-sage-line);
+  }
+
+  .map-legend__dot--building {
+    background: var(--color-forest);
+  }
+
+  .map-legend__dot--umn {
+    background: var(--color-brass);
+  }
+
+  .map-legend__dot--bus {
+    background: var(--color-charcoal);
+  }
+
+  @media (max-width: 30rem) {
+    .elmwood-map {
+      height: 20rem;
+    }
+  }
+</style>
+
+<style is:global>
+  .map-pin--building,
+  .map-pin--umn,
+  .map-pin--bus {
+    border-radius: 50%;
+    border: 2px solid var(--color-ivory);
+    box-shadow: 0 1px 4px rgba(22, 25, 21, 0.4);
+  }
+
+  .map-pin--building {
+    background: var(--color-forest);
+  }
+
+  .map-pin--umn {
+    background: var(--color-brass);
+  }
+
+  .map-pin--bus {
+    background: var(--color-charcoal);
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+  }
+
+  .leaflet-popup-content a {
+    color: var(--color-forest);
+    font-weight: 600;
+  }
+</style>
