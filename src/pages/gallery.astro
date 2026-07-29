@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import { buildingContent } from "../data/buildings";
@@ -64,11 +63,11 @@ const filters = [
         {
           photos.map((photo, i) => (
             <div class="gallery-item" data-category={photo.category}>
-              <Image
-                src={photo.src}
+              <img
+                src={photo.src.src}
+                width={photo.src.width}
+                height={photo.src.height}
                 alt={photo.alt}
-                widths={[300, 600, 900]}
-                sizes="(max-width: 30rem) 100vw, (max-width: 56rem) 50vw, 25vw"
                 loading={i < 4 ? "eager" : "lazy"}
                 class="gallery-item__img"
               />

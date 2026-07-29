@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import Photo from "./Photo.astro";
 import { unitTypes, startingPrice, fmt } from "../data/floorplans";
 import { buildingPhotos } from "../data/buildingPhotos";
@@ -27,11 +26,11 @@ import { buildingPhotos } from "../data/buildingPhotos";
             <li class="floorplan-carousel__slide">
               {
                 photo ? (
-                  <Image
-                    src={photo.src}
+                  <img
+                    src={photo.src.src}
+                    width={photo.src.width}
+                    height={photo.src.height}
                     alt={`${type.name} apartment building exterior, Minneapolis, MN`}
-                    widths={[300, 600, 900]}
-                    sizes="(max-width: 30rem) 78vw, 17rem"
                     loading="lazy"
                     class="floorplan-carousel__img"
                   />

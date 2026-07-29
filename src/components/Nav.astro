@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import elmwoodLogo from "../assets/images/elmwood-logo.png";
 import { calendlyUrl, applyUrl } from "../data/site";
 
@@ -29,7 +28,7 @@ const current = Astro.url.pathname;
   <header class="nav">
     <div class="wrap nav__row">
       <a href="/" class="nav__brand">
-        <Image src={elmwoodLogo} alt="Elmwood" class="nav__brand-img" widths={[280, 420]} sizes="(max-width: 40rem) 140px, 210px" />
+        <img src={elmwoodLogo.src} width={elmwoodLogo.width} height={elmwoodLogo.height} alt="Elmwood" class="nav__brand-img" />
       </a>
 
       <button

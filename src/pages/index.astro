@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
@@ -44,12 +43,12 @@ const landmarks = [
   description="Elmwood Apartments — affordable, clean, secure apartments near the University of Minnesota (UMN) in Minneapolis, MN's SE Como and Marcy-Holmes neighborhoods. Studio to 4-bedroom."
 >
   <section class="hero">
-    <Image
-      src={elmwoodHero}
+    <img
+      src={elmwoodHero.src}
+      width={elmwoodHero.width}
+      height={elmwoodHero.height}
       alt="A grid of Elmwood apartment buildings and sunlit interiors near SE Como, Minneapolis"
       class="hero__media"
-      widths={[640, 1000, 1600, 2000]}
-      sizes="100vw"
       loading="eager"
       fetchpriority="high"
       style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; display: block; z-index: 0;"
@@ -107,11 +106,11 @@ const landmarks = [
       </div>
       {
         como1040Exterior ? (
-          <Image
-            src={como1040Exterior.src}
+          <img
+            src={como1040Exterior.src.src}
+            width={como1040Exterior.src.width}
+            height={como1040Exterior.src.height}
             alt="1040 Como Ave SE, Elmwood apartments near the University of Minnesota, Minneapolis, MN"
-            widths={[400, 800, 1200]}
-            sizes="(max-width: 56rem) 100vw, 45vw"
             loading="lazy"
             class="residences__img"
           />
@@ -136,11 +135,11 @@ const landmarks = [
 
   <section class="section">
     <div class="wrap convenience">
-      <Image
-        src={dinkytownPhoto}
+      <img
+        src={dinkytownPhoto.src}
+        width={dinkytownPhoto.width}
+        height={dinkytownPhoto.height}
         alt="Dinkytown shops and restaurants near the University of Minnesota"
-        widths={[400, 800, 1200]}
-        sizes="(max-width: 56rem) 100vw, 45vw"
         loading="lazy"
         class="convenience__img"
       />
@@ -173,11 +172,11 @@ const landmarks = [
 
   <section class="section">
     <div class="wrap international">
-      <Image
-        src={mspTerminalPhoto}
+      <img
+        src={mspTerminalPhoto.src}
+        width={mspTerminalPhoto.width}
+        height={mspTerminalPhoto.height}
         alt="MSP Airport, where many international students arrive in Minneapolis"
-        widths={[500, 900, 1400]}
-        sizes="(max-width: 56rem) 100vw, 50vw"
         loading="lazy"
         class="international__img"
       />

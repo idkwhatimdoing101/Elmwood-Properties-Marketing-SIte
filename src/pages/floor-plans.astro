@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
@@ -44,11 +43,11 @@ import { calendlyUrl } from "../data/site";
                 <a href={`/buildings/${b.slug}`} class="building-card__link">
                   {
                     exterior ? (
-                      <Image
-                        src={exterior.src}
+                      <img
+                        src={exterior.src.src}
+                        width={exterior.src.width}
+                        height={exterior.src.height}
                         alt={`Exterior of ${b.address}, Minneapolis, MN`}
-                        widths={[300, 600, 900]}
-                        sizes="(max-width: 64rem) 50vw, 33vw"
                         loading="lazy"
                         class="building-card__img"
                       />
@@ -79,11 +78,11 @@ import { calendlyUrl } from "../data/site";
             <div class="plan-card" id={type.key}>
               {
                 photo ? (
-                  <Image
-                    src={photo.src}
+                  <img
+                    src={photo.src.src}
+                    width={photo.src.width}
+                    height={photo.src.height}
                     alt={`${type.name} apartment building exterior, Minneapolis, MN`}
-                    widths={[300, 600, 900]}
-                    sizes="(max-width: 56rem) 50vw, 33vw"
                     loading="lazy"
                     class="plan-card__img"
                   />
