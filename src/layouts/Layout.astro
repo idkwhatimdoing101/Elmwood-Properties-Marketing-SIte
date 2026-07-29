@@ -2,6 +2,9 @@
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import { buildingContent } from "../data/buildings";
+import { mapPoints } from "../data/mapPoints";
+import { unitTypes } from "../data/floorplans";
 
 interface Props {
   title: string;
@@ -12,14 +15,41 @@ const { title, description } = Astro.props;
 const ogImage = new URL("/images/elmwood-og.jpg", Astro.site ?? Astro.url);
 const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 
+const prices = unitTypes.map((t) => t.price);
+const priceRange = `$${Math.min(...prices).toLocaleString()}-$${Math.max(...prices).toLocaleString()}`;
+
+// Multi-location markup: one ApartmentComplex entry per building, tied to the parent org below.
+const locations = buildingContent.map((b) => {
+  const point = mapPoints.find((p) => p.href === `/buildings/${b.slug}`);
+  return {
+    "@type": "ApartmentComplex",
+    name: b.name,
+    description: b.heroDescription,
+    url: new URL(`/buildings/${b.slug}`, Astro.site ?? Astro.url).toString(),
+    telephone: "+1-612-623-4488",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: b.address,
+      addressLocality: "Minneapolis",
+      addressRegion: "MN",
+      postalCode: "55414",
+      addressCountry: "US",
+    },
+    ...(point
+      ? { geo: { "@type": "GeoCoordinates", latitude: point.lat, longitude: point.lng } }
+      : {}),
+  };
+});
+
 const businessSchema = {
   "@context": "https://schema.org",
   "@type": "ApartmentComplex",
   name: "Elmwood Apartments",
   description:
-    "Studio through four-bedroom apartments and houses in the SE Como and Marcy-Holmes neighborhoods of Minneapolis, MN, walking distance to the University of Minnesota.",
+    "Studio through four-bedroom apartments near the University of Minnesota, in the SE Como and Marcy-Holmes neighborhoods of Minneapolis, MN.",
   url: (Astro.site ?? Astro.url).toString(),
   telephone: "+1-612-623-4488",
+  priceRange,
   address: {
     "@type": "PostalAddress",
     streetAddress: "1420 Rollins Ave SE",
@@ -29,6 +59,7 @@ const businessSchema = {
     addressCountry: "US",
   },
   areaServed: ["University of Minnesota", "Dinkytown", "SE Como", "Marcy-Holmes", "Minneapolis, MN"],
+  location: locations,
 };
 ---
 
@@ -43,6 +74,7 @@ const businessSchema = {
 
     <title>{title} | Elmwood Apartments</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Elmwood Apartments" />

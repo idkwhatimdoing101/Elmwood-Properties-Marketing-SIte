@@ -9,6 +9,9 @@ import elmwoodHero from "../assets/images/elmwood-hero.jpg";
 import dinkytownPhoto from "../assets/images/dinkytown.jpg";
 import mspTerminalPhoto from "../assets/images/msp-terminal-2.jpg";
 import { calendlyUrl } from "../data/site";
+import { buildingPhotos } from "../data/buildingPhotos";
+
+const como1040Exterior = buildingPhotos["1040-como-ave-se"]?.find((p) => p.category === "exterior");
 
 const included = ["Parking", "Internet", "Water", "Bicycle Storage"];
 
@@ -37,8 +40,8 @@ const landmarks = [
 ---
 
 <Layout
-  title="Your U of M Home"
-  description="Elmwood Apartments — affordable, clean, secure student housing minutes from the University of Minnesota in SE Como and Marcy-Holmes."
+  title="Apartments Near University of Minnesota"
+  description="Elmwood Apartments — affordable, clean, secure apartments near the University of Minnesota (UMN) in Minneapolis, MN's SE Como and Marcy-Holmes neighborhoods. Studio to 4-bedroom."
 >
   <section class="hero">
     <Image
@@ -87,7 +90,7 @@ const landmarks = [
     <div class="wrap residences">
       <div class="residences__text">
         <p class="eyebrow">Elmwood Residences</p>
-        <h2>Studios to four-bedroom homes, all within walking distance of each other.</h2>
+        <h2>Studios to four-bedroom homes, all within walking distance of the University of Minnesota.</h2>
         <p class="lede">
           Studio, 1, 2, 3, and 4 bedroom apartments and houses, all located in the SE Como
           and Marcy-Holmes neighborhoods, near Van Cleve Park.
@@ -102,7 +105,20 @@ const landmarks = [
           <a href="/contact" class="text-link">Talk to our leasing office →</a>
         </div>
       </div>
-      <Photo label="Studio interior, quarry tile floor" ratio="1 / 1" tone="sage" />
+      {
+        como1040Exterior ? (
+          <Image
+            src={como1040Exterior.src}
+            alt="1040 Como Ave SE, Elmwood apartments near the University of Minnesota, Minneapolis, MN"
+            widths={[400, 800, 1200]}
+            sizes="(max-width: 56rem) 100vw, 45vw"
+            loading="lazy"
+            class="residences__img"
+          />
+        ) : (
+          <Photo label="Studio interior, quarry tile floor" ratio="1 / 1" tone="sage" />
+        )
+      }
     </div>
   </section>
 
@@ -302,6 +318,15 @@ const landmarks = [
     grid-template-columns: 1.15fr 0.85fr;
     gap: clamp(2rem, 5vw, 4rem);
     align-items: start;
+  }
+
+  .residences__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
   }
 
   .residences__text .lede {

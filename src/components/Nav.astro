@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import elmwoodLogo from "../assets/images/elmwood-logo.png";
-import { calendlyUrl } from "../data/site";
+import { calendlyUrl, applyUrl } from "../data/site";
 
 const links = [
   { href: "/", label: "Home" },
@@ -18,8 +18,11 @@ const current = Astro.url.pathname;
 <div class="site-header">
   <div class="utility-bar">
     <div class="wrap utility-bar__row">
-      <a href="tel:+16126234488" class="utility-bar__phone">(612) 623-4488 — we answer, day or night</a>
-      <a href="/maintenance-request" class="utility-bar__resident">Current resident? Submit a maintenance request →</a>
+      <div class="utility-bar__info">
+        <a href="tel:+16126234488" class="utility-bar__phone">(612) 623-4488 — we answer, day or night</a>
+        <span class="utility-bar__address">1420 Rollins Ave SE, Minneapolis, MN</span>
+      </div>
+      <a href={applyUrl} target="_blank" rel="noopener" class="utility-bar__apply">Ready to Apply? Click Here! →</a>
     </div>
   </div>
 
@@ -105,15 +108,44 @@ const current = Astro.url.pathname;
     flex-wrap: wrap;
   }
 
+  .utility-bar__info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  .utility-bar__address {
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .utility-bar__address::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+  }
+
   .utility-bar__phone,
-  .utility-bar__resident {
+  .utility-bar__apply {
     text-decoration: none;
     color: inherit;
     transition: color 0.2s ease;
   }
 
   .utility-bar__phone:hover,
-  .utility-bar__resident:hover {
+  .utility-bar__apply:hover {
+    color: var(--color-brass-light);
+  }
+
+  .utility-bar__apply {
     color: var(--color-brass-light);
   }
 
@@ -209,7 +241,7 @@ const current = Astro.url.pathname;
   }
 
   @media (max-width: 56rem) {
-    .utility-bar__resident {
+    .utility-bar__address {
       display: none;
     }
 
