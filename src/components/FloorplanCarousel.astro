@@ -21,7 +21,9 @@ import { buildingPhotos } from "../data/buildingPhotos";
       {
         unitTypes.map((type) => {
           const price = startingPrice(type.key);
-          const photo = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "exterior");
+          const floorplan = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "floorplan");
+          const exterior = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "exterior");
+          const photo = floorplan ?? exterior;
           return (
             <li class="floorplan-carousel__slide">
               {
@@ -30,9 +32,13 @@ import { buildingPhotos } from "../data/buildingPhotos";
                     src={photo.src.src}
                     width={photo.src.width}
                     height={photo.src.height}
-                    alt={`${type.name} apartment building exterior, Minneapolis, MN`}
+                    alt={
+                      floorplan
+                        ? `${type.name} floor plan diagram, Minneapolis, MN`
+                        : `${type.name} apartment building exterior, Minneapolis, MN`
+                    }
                     loading="lazy"
-                    class="floorplan-carousel__img"
+                    class:list={["floorplan-carousel__img", { "floorplan-carousel__img--diagram": !!floorplan }]}
                   />
                 ) : (
                   <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
@@ -43,7 +49,7 @@ import { buildingPhotos } from "../data/buildingPhotos";
                 {price ? `Starting at ${fmt(price)}/mo` : "Contact for pricing"}
               </p>
               <a href={`/floor-plans#${type.key}`} class="btn btn-outline floorplan-carousel__cta">
-                View
+                View Floor Plan
               </a>
             </li>
           );
@@ -149,6 +155,13 @@ import { buildingPhotos } from "../data/buildingPhotos";
     object-fit: cover;
     border-radius: var(--radius-md);
     display: block;
+  }
+
+  .floorplan-carousel__img--diagram {
+    object-fit: contain;
+    background: var(--color-ivory);
+    border: 1px solid var(--color-sage-line);
+    padding: 0.5rem;
   }
 
   .floorplan-carousel__price {

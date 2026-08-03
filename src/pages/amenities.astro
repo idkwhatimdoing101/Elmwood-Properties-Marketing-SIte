@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import { calendlyUrl } from "../data/site";
 
-const categories = [
+const categories: { title: string; items: string[]; note?: string }[] = [
   {
     title: "New This Year",
     items: ["Utilities included in rent", "Free parking in all apartments", "Free wifi in all apartments"],
@@ -35,7 +35,7 @@ const categories = [
     ],
   },
   {
-    title: "In Every Home",
+    title: "Popular In-Unit Features",
     items: [
       "Air conditioning",
       "Ceiling fans",
@@ -44,6 +44,7 @@ const categories = [
       "Dishwasher",
       "Double-sink bath vanities",
     ],
+    note: "Availability varies by unit and building — ask our office what's included at a specific address.",
   },
 ];
 ---
@@ -76,6 +77,7 @@ const categories = [
                 <li>{item}</li>
               ))}
             </ul>
+            {category.note && <p class="card__note">{category.note}</p>}
           </div>
         ))
       }
@@ -155,6 +157,15 @@ const categories = [
     position: absolute;
     left: 0;
     color: var(--color-brass);
+  }
+
+  .card__note {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-sage-line);
+    font-size: 0.8125rem;
+    font-style: italic;
+    color: var(--color-text-muted);
   }
 
   .access {

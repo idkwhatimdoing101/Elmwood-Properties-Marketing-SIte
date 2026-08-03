@@ -73,7 +73,9 @@ import { calendlyUrl } from "../data/site";
       {
         unitTypes.map((type) => {
           const price = startingPrice(type.key);
-          const photo = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "exterior");
+          const floorplan = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "floorplan");
+          const exterior = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "exterior");
+          const photo = floorplan ?? exterior;
           return (
             <div class="plan-card" id={type.key}>
               {
@@ -82,9 +84,13 @@ import { calendlyUrl } from "../data/site";
                     src={photo.src.src}
                     width={photo.src.width}
                     height={photo.src.height}
-                    alt={`${type.name} apartment building exterior, Minneapolis, MN`}
+                    alt={
+                      floorplan
+                        ? `${type.name} floor plan diagram, Minneapolis, MN`
+                        : `${type.name} apartment building exterior, Minneapolis, MN`
+                    }
                     loading="lazy"
-                    class="plan-card__img"
+                    class:list={["plan-card__img", { "plan-card__img--diagram": !!floorplan }]}
                   />
                 ) : (
                   <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
@@ -93,6 +99,9 @@ import { calendlyUrl } from "../data/site";
               <div class="plan-card__body">
                 <h3>{type.name}</h3>
                 <p class="plan-card__meta">{bedLabel(type.beds)}</p>
+                {!floorplan && (
+                  <p class="plan-card__note">Exact layout varies — ask our office for this floor plan.</p>
+                )}
                 <p class="plan-card__price">
                   {price ? `Starting at ${fmt(price)}/mo` : "Contact us for current pricing"}
                 </p>
@@ -162,6 +171,12 @@ import { calendlyUrl } from "../data/site";
     display: block;
   }
 
+  .plan-card__img--diagram {
+    object-fit: contain;
+    background: var(--color-ivory);
+    padding: 0.75rem;
+  }
+
   .plan-card__body {
     padding: 1.5rem;
   }
@@ -170,6 +185,13 @@ import { calendlyUrl } from "../data/site";
     font-size: 0.875rem;
     color: var(--color-text-muted);
     margin-block: 0.4rem 0.9rem;
+  }
+
+  .plan-card__note {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-bottom: 0.9rem;
   }
 
   .plan-card__price {

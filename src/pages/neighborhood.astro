@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
+import { neighborhoodPhotos } from "../data/neighborhoodPhotos";
 ---
 
 <Layout
@@ -24,7 +25,20 @@ import Photo from "../components/Photo.astro";
 
   <section class="section area">
     <div class="wrap area__grid">
-      <Photo label="Dinkytown storefronts" ratio="4 / 3" tone="sage" />
+      {
+        neighborhoodPhotos["dinkytown"] ? (
+          <img
+            src={neighborhoodPhotos["dinkytown"].src}
+            width={neighborhoodPhotos["dinkytown"].width}
+            height={neighborhoodPhotos["dinkytown"].height}
+            alt="Dinkytown storefronts near the University of Minnesota, Minneapolis, MN"
+            loading="lazy"
+            class="area-photo"
+          />
+        ) : (
+          <Photo label="Dinkytown storefronts" ratio="4 / 3" tone="sage" />
+        )
+      }
       <div>
         <p class="eyebrow">Dinkytown</p>
         <h2>The heart of it all is a short walk away.</h2>
@@ -50,13 +64,39 @@ import Photo from "../components/Photo.astro";
           racks are on-site at our properties for the days you'd rather pedal.
         </p>
       </div>
-      <Photo label="Bike rack outside an Elmwood building" ratio="4 / 3" tone="brass" />
+      {
+        neighborhoodPhotos["getting-around"] ? (
+          <img
+            src={neighborhoodPhotos["getting-around"].src}
+            width={neighborhoodPhotos["getting-around"].width}
+            height={neighborhoodPhotos["getting-around"].height}
+            alt="Covered bike rack at Elmwood's 817 12th Ave SE building, Minneapolis, MN"
+            loading="lazy"
+            class="area-photo"
+          />
+        ) : (
+          <Photo label="Bike rack outside an Elmwood building" ratio="4 / 3" tone="brass" />
+        )
+      }
     </div>
   </section>
 
   <section class="section area">
     <div class="wrap area__grid">
-      <Photo label="Van Cleve Park in autumn" ratio="4 / 3" tone="sage" />
+      {
+        neighborhoodPhotos["park"] ? (
+          <img
+            src={neighborhoodPhotos["park"].src}
+            width={neighborhoodPhotos["park"].width}
+            height={neighborhoodPhotos["park"].height}
+            alt="Van Cleve Park near Elmwood apartments, Minneapolis, MN"
+            loading="lazy"
+            class="area-photo"
+          />
+        ) : (
+          <Photo label="Van Cleve Park in autumn" ratio="4 / 3" tone="sage" />
+        )
+      }
       <div>
         <p class="eyebrow">Parks &amp; Recreation</p>
         <h2>Green space and game days, both close by.</h2>
@@ -82,7 +122,20 @@ import Photo from "../components/Photo.astro";
           a lot if it applies to you.
         </p>
       </div>
-      <Photo label="Corner store near campus" ratio="4 / 3" tone="brass" />
+      {
+        neighborhoodPhotos["daily-life"] ? (
+          <img
+            src={neighborhoodPhotos["daily-life"].src}
+            width={neighborhoodPhotos["daily-life"].width}
+            height={neighborhoodPhotos["daily-life"].height}
+            alt="Convenience store near Elmwood apartments and the University of Minnesota"
+            loading="lazy"
+            class="area-photo"
+          />
+        ) : (
+          <Photo label="Corner store near campus" ratio="4 / 3" tone="brass" />
+        )
+      }
     </div>
   </section>
 
@@ -124,6 +177,15 @@ import Photo from "../components/Photo.astro";
 
   .area__grid--reverse > *:first-child {
     order: 2;
+  }
+
+  .area-photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
   }
 
   .area h2 {
