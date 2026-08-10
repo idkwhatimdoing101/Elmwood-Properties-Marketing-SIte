@@ -1,0 +1,227 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Divider from "../../components/Divider.astro";
+import Photo from "../../components/Photo.astro";
+import { unitTypeMeta, offeringsForType, bedLabel, fmt, type UnitTypeMeta } from "../../data/floorplans";
+import { getBuildingBySlug } from "../../data/buildings";
+import { buildingPhotos } from "../../data/buildingPhotos";
+import { calendlyUrl } from "../../data/site";
+
+export function getStaticPaths() {
+  return unitTypeMeta.map((type) => ({
+    params: { type: type.slug },
+    props: { type },
+  }));
+}
+
+interface Props {
+  type: UnitTypeMeta;
+}
+
+const { type } = Astro.props;
+
+const matches = offeringsForType(type.key)
+  .map((offering) => ({
+    offering,
+    building: getBuildingBySlug(offering.buildingSlug),
+  }))
+  .filter((m) => m.building);
+
+const priced = matches.filter((m) => m.offering.price !== null);
+const lowPrice = priced.length ? Math.min(...priced.map((m) => m.offering.price as number)) : null;
+---
+
+<Layout
+  title={`${type.name} Apartments`}
+  description={`${type.name} apartments near the University of Minnesota, available at ${matches.length} Elmwood building${matches.length === 1 ? "" : "s"} in the SE Como and Marcy-Holmes neighborhoods of Minneapolis, MN.`}
+>
+  <section class="section hero-sm">
+    <div class="wrap">
+      <a href="/floor-plans" class="text-link back-link">← All Floor Plans</a>
+      <p class="eyebrow">{bedLabel(type.beds)}</p>
+      <h1>{type.name} Apartments</h1>
+      <p class="lede">
+        {
+          lowPrice
+            ? `Available at ${matches.length} Elmwood ${matches.length === 1 ? "building" : "buildings"}, starting at ${fmt(lowPrice)}/mo.`
+            : `Available at ${matches.length} Elmwood ${matches.length === 1 ? "building" : "buildings"} — contact us for current pricing.`
+        }{" "}
+        Every address is in the SE Como or Marcy-Holmes neighborhoods, within about a mile of the
+        University of Minnesota campus.
+      </p>
+    </div>
+  </section>
+
+  <Divider />
+
+  <section class="section">
+    <div class="wrap results-grid">
+      {
+        matches.map(({ offering, building }) => {
+          const photos = buildingPhotos[building!.slug] ?? [];
+          const exterior = photos.find((p) => p.category === "exterior");
+          return (
+            <div class="result-card">
+              {
+                exterior ? (
+                  <img
+                    src={exterior.src.src}
+                    width={exterior.src.width}
+                    height={exterior.src.height}
+                    alt={`Exterior of ${building!.address}, Minneapolis, MN`}
+                    loading="lazy"
+                    class="result-card__img"
+                  />
+                ) : (
+                  <Photo label={`${building!.address} exterior`} ratio="4 / 3" tone="forest" />
+                )
+              }
+              <div class="result-card__body">
+                <h2 class="result-card__address">{building!.address}</h2>
+                <p class="result-card__price">
+                  {offering.price ? `${fmt(offering.price)}/mo` : "Contact us for pricing"}
+                </p>
+                {offering.note && <p class="result-card__note">{offering.note}</p>}
+                <a href={`/buildings/${building!.slug}`} class="btn btn-outline result-card__cta">
+                  See This Building
+                </a>
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+
+    {
+      matches.length === 0 && (
+        <div class="wrap">
+          <p class="lede">
+            We don't have a {type.name.toLowerCase()} listed right now — reach out and we'll let you
+            know when one opens up.
+          </p>
+          <a href="/contact" class="text-link">Contact us →</a>
+        </div>
+      )
+    }
+  </section>
+
+  <section class="section cta">
+    <div class="wrap cta__inner">
+      <h2>Looking for a different layout?</h2>
+      <p class="lede cta__lede">Browse every floor plan and price, or book a tour of any building.</p>
+      <div class="cta__actions">
+        <a href="/floor-plans" class="btn btn-primary">View All Floor Plans</a>
+        <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-outline">Book a Tour</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sm h1 {
+    margin-block: 0.9rem 1rem;
+    max-width: 34rem;
+  }
+
+  .hero-sm .lede {
+    max-width: 36rem;
+  }
+
+  .back-link {
+    display: table;
+    margin-bottom: 1.25rem;
+  }
+
+  .text-link {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-forest);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-forest);
+    padding-bottom: 2px;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+
+  .result-card {
+    border: 1px solid var(--color-sage-line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-ivory);
+  }
+
+  .result-card__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  .result-card__body {
+    padding: 1.5rem;
+  }
+
+  .result-card__address {
+    font-size: 1.125rem;
+    color: var(--color-charcoal);
+    margin-bottom: 0.4rem;
+  }
+
+  .result-card__price {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--color-forest);
+    margin-bottom: 0.75rem;
+  }
+
+  .result-card__note {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-bottom: 0.9rem;
+  }
+
+  .result-card__cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cta {
+    text-align: center;
+  }
+
+  .cta h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  .cta__lede {
+    margin-inline: auto;
+    max-width: 30rem;
+  }
+
+  .cta__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 64rem) {
+    .results-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .results-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

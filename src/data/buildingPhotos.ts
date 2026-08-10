@@ -11,6 +11,7 @@ export interface BuildingPhoto {
   src: ImageMetadata;
   category: PhotoCategory;
   label: string;
+  filename: string;
 }
 
 const categorize = (filename: string): PhotoCategory => {
@@ -44,6 +45,11 @@ for (const path in images) {
     src: images[path].default,
     category: categorize(filename),
     label: labelize(filename),
+    filename,
   };
   (buildingPhotos[slug] ??= []).push(photo);
 }
+
+/** Look up one specific photo by its building slug + exact filename (e.g. "kitchenliving.jpg"). */
+export const getBuildingPhoto = (slug: string, filename: string) =>
+  buildingPhotos[slug]?.find((p) => p.filename === filename);

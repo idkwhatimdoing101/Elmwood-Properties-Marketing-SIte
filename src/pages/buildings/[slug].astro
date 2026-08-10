@@ -5,6 +5,7 @@ import Photo from "../../components/Photo.astro";
 import { buildingContent, type BuildingContent } from "../../data/buildings";
 import { buildingPhotos } from "../../data/buildingPhotos";
 import { calendlyUrl } from "../../data/site";
+import { offeringsForBuilding, getUnitTypeMeta, bedLabel, fmt } from "../../data/floorplans";
 
 export function getStaticPaths() {
   return buildingContent.map((building) => ({
@@ -23,6 +24,7 @@ const photos = buildingPhotos[building.slug] ?? [];
 const exterior = photos.find((p) => p.category === "exterior");
 const gallery = photos.filter((p) => p.category === "interior" || p.category === "amenity");
 const floorplans = photos.filter((p) => p.category === "floorplan");
+const layouts = offeringsForBuilding(building.slug);
 
 const residenceSchema = {
   "@context": "https://schema.org",
@@ -90,8 +92,36 @@ const residenceSchema = {
   </section>
 
   {
-    gallery.length > 0 && (
+    layouts.length > 0 && (
       <section class="section section--sage">
+        <div class="wrap">
+          <p class="eyebrow">Availability</p>
+          <h2 class="layouts-heading">Layouts at {building.address}.</h2>
+          <ul class="layout-list">
+            {layouts.map((offering) => {
+              const meta = getUnitTypeMeta(offering.unitType);
+              return (
+                <li class="layout-row">
+                  <div class="layout-row__info">
+                    <span class="layout-row__name">{meta?.name ?? offering.unitType}</span>
+                    <span class="layout-row__meta">{bedLabel(meta?.beds ?? 0)}</span>
+                  </div>
+                  <span class="layout-row__price">
+                    {offering.price ? `${fmt(offering.price)}/mo` : "Contact us"}
+                  </span>
+                  {offering.note && <span class="layout-row__note">{offering.note}</span>}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    gallery.length > 0 && (
+      <section class="section">
         <div class="wrap">
           <p class="eyebrow">Photos</p>
           <h2 class="photos-heading">Inside {building.address}.</h2>
@@ -212,6 +242,57 @@ const residenceSchema = {
 
   .photos-heading {
     margin-block: 0.9rem 1.75rem;
+  }
+
+  .layouts-heading {
+    margin-block: 0.9rem 1.5rem;
+  }
+
+  .layout-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-sage-line);
+  }
+
+  .layout-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--color-sage-line);
+  }
+
+  .layout-row__info {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex: 1;
+    min-width: 12rem;
+  }
+
+  .layout-row__name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-charcoal);
+  }
+
+  .layout-row__meta {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .layout-row__price {
+    font-weight: 600;
+    color: var(--color-forest);
+  }
+
+  .layout-row__note {
+    flex-basis: 100%;
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    font-style: italic;
   }
 
   .photo-grid {

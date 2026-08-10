@@ -4,7 +4,7 @@ import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 import { buildingContent } from "../data/buildings";
 import { mapPoints } from "../data/mapPoints";
-import { unitTypes } from "../data/floorplans";
+import { offerings } from "../data/floorplans";
 
 interface Props {
   title: string;
@@ -15,7 +15,7 @@ const { title, description } = Astro.props;
 const ogImage = new URL("/images/elmwood-og.jpg", Astro.site ?? Astro.url);
 const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 
-const prices = unitTypes.map((t) => t.price);
+const prices = offerings.map((o) => o.price).filter((p): p is number => p !== null);
 const priceRange = `$${Math.min(...prices).toLocaleString()}-$${Math.max(...prices).toLocaleString()}`;
 
 // Multi-location markup: one ApartmentComplex entry per building, tied to the parent org below.

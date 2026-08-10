@@ -15,7 +15,7 @@ export const buildingContent: BuildingContent[] = [
     heroDescription:
       "Apartments at 1040 Como Ave SE in the SE Como neighborhood of Minneapolis, MN, a 15-minute walk to the University of Minnesota East Bank campus.",
     overview:
-      "Large one-bedroom apartments with high 9 ft ceilings, sized to comfortably fit two people. Stainless steel appliances, granite countertops, and ceramic floors throughout, with super-insulated walls for sound privacy and consistent temperature control. Forced air heating and air conditioning with individual apartment fresh air exchange keep the air clean and comfortable year-round. Close to major shopping centers and convenience stores, with MTC bus routes nearby — the #3 stops at the corner of Como Ave SE and 15th Ave SE, and the #4 and #118 stop around the corner at 10th Ave SE and 8th St SE.",
+      "Studio and large one-bedroom apartments with high 9 ft ceilings, the one-beds sized to comfortably fit two people. Stainless steel appliances, granite countertops, and ceramic floors throughout, with super-insulated walls for sound privacy and consistent temperature control. Forced air heating and air conditioning with individual apartment fresh air exchange keep the air clean and comfortable year-round. Close to major shopping centers and convenience stores, with MTC bus routes nearby — the #3 stops at the corner of Como Ave SE and 15th Ave SE, and the #4 and #118 stop around the corner at 10th Ave SE and 8th St SE.",
     highlights: [
       "Water, internet, and trash collection included; parking included for most apartments",
       "Stainless steel appliances, granite countertops, and ceramic floors",

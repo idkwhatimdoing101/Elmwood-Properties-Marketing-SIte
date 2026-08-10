@@ -1,7 +1,7 @@
 ---
 import Photo from "./Photo.astro";
-import { unitTypes, startingPrice, fmt } from "../data/floorplans";
-import { buildingPhotos } from "../data/buildingPhotos";
+import { unitTypeMeta, startingPrice, fmt } from "../data/floorplans";
+import { getBuildingPhoto } from "../data/buildingPhotos";
 ---
 
 <section class="section floorplan-carousel">
@@ -19,11 +19,10 @@ import { buildingPhotos } from "../data/buildingPhotos";
   <div class="floorplan-carousel__track-wrap wrap" id="fp-track">
     <ul class="floorplan-carousel__track">
       {
-        unitTypes.map((type) => {
+        unitTypeMeta.map((type) => {
           const price = startingPrice(type.key);
-          const floorplan = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "floorplan");
-          const exterior = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "exterior");
-          const photo = floorplan ?? exterior;
+          const photo = getBuildingPhoto(type.photo.buildingSlug, type.photo.filename);
+          const isExterior = type.photo.filename.includes("exterior");
           return (
             <li class="floorplan-carousel__slide">
               {
@@ -33,12 +32,12 @@ import { buildingPhotos } from "../data/buildingPhotos";
                     width={photo.src.width}
                     height={photo.src.height}
                     alt={
-                      floorplan
-                        ? `${type.name} floor plan diagram, Minneapolis, MN`
-                        : `${type.name} apartment building exterior, Minneapolis, MN`
+                      isExterior
+                        ? `${type.name} apartment building exterior, Minneapolis, MN`
+                        : `${type.name} kitchen and living area, Minneapolis, MN`
                     }
                     loading="lazy"
-                    class:list={["floorplan-carousel__img", { "floorplan-carousel__img--diagram": !!floorplan }]}
+                    class="floorplan-carousel__img"
                   />
                 ) : (
                   <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
@@ -48,8 +47,8 @@ import { buildingPhotos } from "../data/buildingPhotos";
               <p class="floorplan-carousel__price">
                 {price ? `Starting at ${fmt(price)}/mo` : "Contact for pricing"}
               </p>
-              <a href={`/floor-plans#${type.key}`} class="btn btn-outline floorplan-carousel__cta">
-                View Floor Plan
+              <a href={`/floor-plans/${type.slug}`} class="btn btn-outline floorplan-carousel__cta">
+                View {type.name} Homes
               </a>
             </li>
           );
@@ -157,12 +156,6 @@ import { buildingPhotos } from "../data/buildingPhotos";
     display: block;
   }
 
-  .floorplan-carousel__img--diagram {
-    object-fit: contain;
-    background: var(--color-ivory);
-    border: 1px solid var(--color-sage-line);
-    padding: 0.5rem;
-  }
 
   .floorplan-carousel__price {
     font-family: var(--font-display);

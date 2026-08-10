@@ -2,8 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import Photo from "../components/Photo.astro";
-import { buildings, unitTypes, startingPrice, bedLabel, fmt } from "../data/floorplans";
-import { buildingPhotos } from "../data/buildingPhotos";
+import { buildings, unitTypeMeta, offeringsForType, startingPrice, bedLabel, fmt } from "../data/floorplans";
+import { buildingPhotos, getBuildingPhoto } from "../data/buildingPhotos";
 import { calendlyUrl } from "../data/site";
 ---
 
@@ -71,11 +71,12 @@ import { calendlyUrl } from "../data/site";
   <section class="section">
     <div class="wrap plans-grid">
       {
-        unitTypes.map((type) => {
+        unitTypeMeta.map((type) => {
           const price = startingPrice(type.key);
-          const floorplan = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "floorplan");
-          const exterior = buildingPhotos[type.buildingSlug]?.find((p) => p.category === "exterior");
-          const photo = floorplan ?? exterior;
+          const matches = offeringsForType(type.key);
+          const buildingCount = matches.length;
+          const photo = getBuildingPhoto(type.photo.buildingSlug, type.photo.filename);
+          const isExterior = type.photo.filename.includes("exterior");
           return (
             <div class="plan-card" id={type.key}>
               {
@@ -85,12 +86,12 @@ import { calendlyUrl } from "../data/site";
                     width={photo.src.width}
                     height={photo.src.height}
                     alt={
-                      floorplan
-                        ? `${type.name} floor plan diagram, Minneapolis, MN`
-                        : `${type.name} apartment building exterior, Minneapolis, MN`
+                      isExterior
+                        ? `${type.name} apartment building exterior, Minneapolis, MN`
+                        : `${type.name} kitchen and living area, Minneapolis, MN`
                     }
                     loading="lazy"
-                    class:list={["plan-card__img", { "plan-card__img--diagram": !!floorplan }]}
+                    class="plan-card__img"
                   />
                 ) : (
                   <Photo label={`${type.name} layout`} ratio="4 / 3" tone="sage" />
@@ -98,15 +99,14 @@ import { calendlyUrl } from "../data/site";
               }
               <div class="plan-card__body">
                 <h3>{type.name}</h3>
-                <p class="plan-card__meta">{bedLabel(type.beds)}</p>
-                {!floorplan && (
-                  <p class="plan-card__note">Exact layout varies — ask our office for this floor plan.</p>
-                )}
+                <p class="plan-card__meta">
+                  {bedLabel(type.beds)} · Available at {buildingCount} {buildingCount === 1 ? "building" : "buildings"}
+                </p>
                 <p class="plan-card__price">
                   {price ? `Starting at ${fmt(price)}/mo` : "Contact us for current pricing"}
                 </p>
-                <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-outline plan-card__cta">
-                  Book a Tour
+                <a href={`/floor-plans/${type.slug}`} class="btn btn-outline plan-card__cta">
+                  See {type.name} Homes
                 </a>
               </div>
             </div>
@@ -171,11 +171,6 @@ import { calendlyUrl } from "../data/site";
     display: block;
   }
 
-  .plan-card__img--diagram {
-    object-fit: contain;
-    background: var(--color-ivory);
-    padding: 0.75rem;
-  }
 
   .plan-card__body {
     padding: 1.5rem;
