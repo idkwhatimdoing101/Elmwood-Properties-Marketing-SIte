@@ -1,6 +1,6 @@
 ---
 import elmwoodLogo from "../assets/images/elmwood-logo.png";
-import { calendlyUrl, applyUrl } from "../data/site";
+import { calendlyUrl } from "../data/site";
 
 const links = [
   { href: "/", label: "Home" },
@@ -9,6 +9,7 @@ const links = [
   { href: "/neighborhood", label: "Neighborhood" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" },
+  { href: "/apply", label: "Apply" },
 ];
 
 const current = Astro.url.pathname;
@@ -21,7 +22,7 @@ const current = Astro.url.pathname;
         <a href="tel:+16126234488" class="utility-bar__phone">(612) 623-4488 — we answer, day or night</a>
         <span class="utility-bar__address">1420 Rollins Ave SE, Minneapolis, MN</span>
       </div>
-      <a href={applyUrl} target="_blank" rel="noopener" class="utility-bar__apply">Ready to Apply? Click Here! →</a>
+      <a href="/apply" class="utility-bar__apply" aria-current={current === "/apply" ? "page" : undefined}>Ready to Apply? Click Here! →</a>
     </div>
   </div>
 

@@ -1,0 +1,301 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Divider from "../components/Divider.astro";
+import { web3FormsAccessKey } from "../data/site";
+---
+
+<Layout
+  title="Apply"
+  description="Apply to lease an Elmwood apartment online. Fill out the form yourself or use the voice-fill accessibility tool, then review everything before you submit."
+>
+  <section class="section hero-sm">
+    <div class="wrap">
+      <p class="eyebrow">Apply Online</p>
+      <h1>Start your application.</h1>
+      <p class="lede">
+        Fill out the form below, or use <strong>Fill by Voice</strong> if you'd rather speak your
+        answers. Either way, you'll get a chance to review everything before it's submitted to
+        our leasing office.
+      </p>
+    </div>
+  </section>
+
+  <Divider />
+
+  <section class="section">
+    <div class="wrap wrap--narrow">
+      <div class="voice-tool" data-voice-tool>
+        <div class="voice-tool__header">
+          <div>
+            <h2 class="voice-tool__title">Fill by Voice</h2>
+            <p class="field-note">
+              An accessibility tool that reads each question aloud and fills the form from your
+              spoken answers. You can always edit anything by hand, before or after.
+            </p>
+          </div>
+          <button type="button" class="btn btn-outline voice-tool__start" data-voice-start>
+            🎙️ Start Fill by Voice
+          </button>
+        </div>
+
+        <p class="voice-tool__unsupported" data-voice-unsupported hidden>
+          Voice fill isn't supported in this browser — try the latest Chrome or Edge. You can
+          still fill out the form below by hand.
+        </p>
+
+        <div class="voice-tool__panel" data-voice-panel hidden>
+          <p class="voice-tool__status" data-voice-status aria-live="polite">Ready.</p>
+          <p class="voice-tool__transcript" data-voice-transcript aria-live="polite"></p>
+          <div class="voice-tool__controls">
+            <button type="button" class="btn btn-ghost-dark" data-voice-redo>Redo This Answer</button>
+            <button type="button" class="btn btn-ghost-dark" data-voice-skip>Skip</button>
+            <button type="button" class="btn btn-ghost-dark" data-voice-stop>Stop Voice Fill</button>
+          </div>
+        </div>
+      </div>
+
+      <form id="apply-form" data-apply-form data-step="fill" data-access-key={web3FormsAccessKey}>
+        <p hidden>
+          <label>
+            Don't fill this out if you're human:
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
+          </label>
+        </p>
+
+        <div class="form-grid" data-fill-fields>
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input id="firstName" name="firstName" type="text" autocomplete="given-name" required />
+          </div>
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input id="lastName" name="lastName" type="text" autocomplete="family-name" required />
+          </div>
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="dob">Date of birth</label>
+            <input id="dob" name="dob" type="date" required />
+          </div>
+          <div class="field">
+            <label for="moveInDate">Desired move-in date</label>
+            <input id="moveInDate" name="moveInDate" type="date" required />
+          </div>
+          <div class="field field--full">
+            <label for="criminalHistory">Do you have a criminal history?</label>
+            <select id="criminalHistory" name="criminalHistory" required>
+              <option value="">Select one</option>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div class="field field--full" data-criminal-details hidden>
+            <label for="criminalHistoryDetails">Please briefly explain</label>
+            <textarea id="criminalHistoryDetails" name="criminalHistoryDetails"></textarea>
+          </div>
+        </div>
+
+        <div class="apply-actions" data-fill-actions>
+          <button type="button" class="btn btn-primary" data-go-review>Review Application →</button>
+        </div>
+
+        <div class="apply-review" data-review-fields hidden>
+          <h2 tabindex="-1">Review your application</h2>
+          <p class="field-note">
+            Double-check everything below. You can go back and change anything before it's submitted.
+          </p>
+          <dl class="review-list" data-review-list></dl>
+          <button type="button" class="btn btn-outline" data-voice-readback>🔊 Read My Answers Back</button>
+
+          <div class="apply-actions">
+            <button type="button" class="btn btn-outline" data-go-back>← Back to Edit</button>
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="form-status" data-form-status hidden>
+        <p data-success>Application received — thank you. Our leasing office will follow up soon.</p>
+        <p data-error>Something went wrong submitting that. Please call us directly at (612) 623-4488.</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import "../scripts/apply-form.js";
+</script>
+
+<style>
+  [hidden] {
+    display: none !important;
+  }
+
+  .hero-sm h1 {
+    margin-block: 0.9rem 1rem;
+    max-width: 32rem;
+  }
+
+  .hero-sm .lede {
+    max-width: 34rem;
+  }
+
+  .voice-tool {
+    background: var(--color-charcoal);
+    color: var(--color-ivory);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .voice-tool__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .voice-tool__title {
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
+    color: var(--color-ivory);
+  }
+
+  .voice-tool .field-note {
+    color: var(--color-text-on-dark-muted);
+    max-width: 32rem;
+  }
+
+  .voice-tool__start {
+    flex-shrink: 0;
+  }
+
+  .voice-tool__unsupported {
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+    color: var(--color-text-on-dark-muted);
+  }
+
+  .voice-tool__panel {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(252, 251, 244, 0.15);
+  }
+
+  .voice-tool__status {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+  }
+
+  .voice-tool__transcript {
+    margin-top: 0.4rem;
+    font-size: 0.875rem;
+    color: var(--color-text-on-dark-muted);
+    min-height: 1.25em;
+  }
+
+  .voice-tool__controls {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+  }
+
+  .btn-ghost-dark {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 0.7em 1.2em;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(252, 251, 244, 0.4);
+    background: transparent;
+    color: var(--color-ivory);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn-ghost-dark:hover {
+    background: rgba(252, 251, 244, 0.12);
+    border-color: var(--color-ivory);
+  }
+
+  .apply-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .apply-review h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .apply-review .field-note {
+    margin-bottom: 1.5rem;
+  }
+
+  .review-list {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: 0.85rem 1.5rem;
+    background: var(--color-sage);
+    border: 1px solid var(--color-sage-line);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 1.75rem;
+    margin: 0;
+  }
+
+  .review-list dt {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
+  }
+
+  .review-list dd {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .form-status {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+  }
+
+  .form-status[data-state="success"] {
+    background: var(--color-sage);
+    color: var(--color-forest-deep);
+  }
+
+  .form-status[data-state="error"] {
+    background: #f6e6e0;
+    color: #7a3420;
+  }
+
+  .form-status p {
+    display: none;
+  }
+
+  @media (max-width: 40rem) {
+    .review-list {
+      grid-template-columns: 1fr;
+    }
+
+    .review-list dd {
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>

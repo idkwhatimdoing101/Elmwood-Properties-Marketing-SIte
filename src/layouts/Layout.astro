@@ -124,7 +124,8 @@ const businessSchema = {
     </main>
     <Footer />
 
-    <!-- Meta Pixel conversion tracking: fires standard events on the two real lease-funnel actions -->
+    <!-- Meta Pixel conversion tracking: fires on tour bookings (link click) -->
+    <!-- SubmitApplication fires from src/scripts/apply-form.js on a successful application submit -->
     <script is:inline>
       document.addEventListener("click", function (event) {
         var link = event.target.closest("a[href]");
@@ -132,8 +133,6 @@ const businessSchema = {
 
         if (link.href.indexOf("calendly.com") !== -1) {
           fbq("track", "Schedule", { content_name: "Book a Tour" });
-        } else if (link.href.indexOf("rent-application") !== -1) {
-          fbq("track", "SubmitApplication", { content_name: "Apply" });
         }
       });
     </script>

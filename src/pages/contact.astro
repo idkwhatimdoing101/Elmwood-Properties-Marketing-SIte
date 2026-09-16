@@ -108,7 +108,7 @@ import Divider from "../components/Divider.astro";
       status.querySelectorAll("p").forEach((p) => {
         const show = (state === "success" && p.hasAttribute("data-success")) ||
           (state === "error" && p.hasAttribute("data-error"));
-        (p as HTMLElement).style.display = show ? "" : "none";
+        (p as HTMLElement).style.display = show ? "block" : "none";
       });
     });
     observer.observe(status, { attributes: true, attributeFilter: ["data-state"] });
