@@ -32,15 +32,48 @@ function normalizeEmail(transcript) {
   return t.includes("@") && t.includes(".") ? t : null;
 }
 
-function normalizeDate(transcript) {
+function hasExplicitYear(transcript) {
+  return /\b(18|19|20)\d{2}\b/.test(transcript);
+}
+
+function parseSpokenDate(transcript) {
   const cleaned = transcript.toLowerCase().replace(/(\d+)(st|nd|rd|th)\b/g, "$1").trim();
   const parsed = new Date(cleaned);
-  if (Number.isNaN(parsed.getTime())) return null;
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function toISODate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+// Requires an explicit year — without one, JS Date parsing silently defaults to
+// 2001, which is wrong far more often than it's right for a date of birth.
+function normalizeDate(transcript) {
+  if (!hasExplicitYear(transcript)) return null;
+  const parsed = parseSpokenDate(transcript);
+  if (!parsed) return null;
   const year = parsed.getFullYear();
   if (year < 1900 || year > 2100) return null;
-  const month = String(parsed.getMonth() + 1).padStart(2, "0");
-  const day = String(parsed.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return toISODate(parsed);
+}
+
+// A move-in date is usually said without a year ("October 1st") — assume the
+// next upcoming occurrence of that month/day rather than rejecting it.
+function normalizeFutureDate(transcript) {
+  const parsed = parseSpokenDate(transcript);
+  if (!parsed) return null;
+  if (!hasExplicitYear(transcript)) {
+    const today = new Date();
+    const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    parsed.setFullYear(today.getFullYear());
+    if (parsed < todayMidnight) parsed.setFullYear(today.getFullYear() + 1);
+  }
+  const year = parsed.getFullYear();
+  if (year < 1900 || year > 2100) return null;
+  return toISODate(parsed);
 }
 
 function normalizeYesNo(transcript) {
@@ -61,6 +94,7 @@ export const NORMALIZERS = {
   phone: normalizePhone,
   email: normalizeEmail,
   date: normalizeDate,
+  futureDate: normalizeFutureDate,
   yesno: normalizeYesNo,
   text: normalizeFreeText,
 };

@@ -5,8 +5,8 @@ const FIELDS = [
   { name: "lastName", label: "Last name", kind: "name", prompt: "What is your last name?" },
   { name: "phone", label: "Phone number", kind: "phone", prompt: "What is your phone number? You can say the digits one at a time." },
   { name: "email", label: "Email", kind: "email", prompt: "What is your email address? Say 'at' for the at sign and 'dot' for periods." },
-  { name: "dob", label: "Date of birth", kind: "date", prompt: "What is your date of birth? For example, say January 5th, 1990." },
-  { name: "moveInDate", label: "Desired move-in date", kind: "date", prompt: "What date would you like to move in?" },
+  { name: "dob", label: "Date of birth", kind: "date", prompt: "What is your date of birth? Please include the year — for example, say January 5th, 1990." },
+  { name: "moveInDate", label: "Desired move-in date", kind: "futureDate", prompt: "What date would you like to move in? For example, say October 1st." },
   {
     name: "criminalHistory",
     label: "Criminal history",
