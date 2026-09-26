@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
 import { web3FormsAccessKey } from "../data/site";
+import { unitTypeMeta } from "../data/floorplans";
 ---
 
 <Layout
@@ -86,6 +87,13 @@ import { web3FormsAccessKey } from "../data/site";
           <div class="field">
             <label for="moveInDate">Desired move-in date</label>
             <input id="moveInDate" name="moveInDate" type="date" required />
+          </div>
+          <div class="field">
+            <label for="desiredBedrooms">Desired bedrooms</label>
+            <select id="desiredBedrooms" name="desiredBedrooms" required>
+              <option value="">Select one</option>
+              {unitTypeMeta.map((type) => <option value={type.name}>{type.name}</option>)}
+            </select>
           </div>
           <div class="field field--full">
             <label for="criminalHistory">Do you have a criminal history?</label>

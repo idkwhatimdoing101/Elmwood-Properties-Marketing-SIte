@@ -1,4 +1,5 @@
-import { VoiceFillEngine, isVoiceFillSupported } from "./voice-fill.js";
+import { VoiceFillEngine, isVoiceFillSupported, applyVoicePreference } from "./voice-fill.js";
+import { ttsVoiceNames } from "../data/site";
 
 const FIELDS = [
   { name: "firstName", label: "First name", kind: "name", prompt: "What is your first name?" },
@@ -7,6 +8,7 @@ const FIELDS = [
   { name: "email", label: "Email", kind: "email", prompt: "What is your email address? Say 'at' for the at sign and 'dot' for periods." },
   { name: "dob", label: "Date of birth", kind: "date", prompt: "What is your date of birth? Please include the year — for example, say January 5th, 1990." },
   { name: "moveInDate", label: "Desired move-in date", kind: "futureDate", prompt: "What date would you like to move in? For example, say October 1st." },
+  { name: "desiredBedrooms", label: "Desired bedrooms", kind: "bedrooms", prompt: "How many bedrooms are you looking for? You can say studio, 1, 2, 3, or 4." },
   {
     name: "criminalHistory",
     label: "Criminal history",
@@ -87,7 +89,9 @@ function initApplyForm() {
     if (!window.speechSynthesis) return;
     const parts = visibleFields().map((field) => `${field.label}: ${form.elements.namedItem(field.name).value || "blank"}`);
     window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(`Here's what you entered. ${parts.join(". ")}`));
+    const utterance = new SpeechSynthesisUtterance(`Here's what you entered. ${parts.join(". ")}`);
+    applyVoicePreference(utterance, ttsVoiceNames);
+    window.speechSynthesis.speak(utterance);
   });
 
   // Voice fill accessibility tool
@@ -114,6 +118,7 @@ function initApplyForm() {
       fields: FIELDS,
       els,
       onDone: goToReview,
+      voicePreferences: ttsVoiceNames,
     });
 
     els.startBtn.addEventListener("click", () => engine.start());

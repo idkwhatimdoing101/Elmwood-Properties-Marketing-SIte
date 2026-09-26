@@ -76,6 +76,19 @@ function normalizeFutureDate(transcript) {
   return toISODate(parsed);
 }
 
+function normalizeBedrooms(transcript) {
+  const t = transcript.toLowerCase();
+  if (/\bstudio\b/.test(t)) return "Studio";
+  const words = t.replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter(Boolean);
+  for (const w of words) {
+    let n = null;
+    if (/^\d+$/.test(w)) n = Number(w);
+    else if (w in WORD_DIGITS) n = Number(WORD_DIGITS[w]);
+    if (n >= 1 && n <= 4) return `${n} Bedroom`;
+  }
+  return null;
+}
+
 function normalizeYesNo(transcript) {
   const t = transcript.toLowerCase();
   if (/\b(yes|yeah|yep|correct|affirmative)\b/.test(t)) return "Yes";
@@ -95,6 +108,7 @@ export const NORMALIZERS = {
   email: normalizeEmail,
   date: normalizeDate,
   futureDate: normalizeFutureDate,
+  bedrooms: normalizeBedrooms,
   yesno: normalizeYesNo,
   text: normalizeFreeText,
 };
@@ -103,12 +117,42 @@ export function isVoiceFillSupported() {
   return Boolean((window.SpeechRecognition || window.webkitSpeechRecognition) && window.speechSynthesis);
 }
 
+// The browser/OS supplies the actual voices, so they can't be fixed in code —
+// only requested by name. getVoices() is often empty until the browser fires
+// voiceschanged, so we keep a cache that refreshes when that happens.
+let cachedVoices = [];
+function refreshVoiceCache() {
+  cachedVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+}
+if (typeof window !== "undefined" && window.speechSynthesis) {
+  refreshVoiceCache();
+  window.speechSynthesis.addEventListener("voiceschanged", refreshVoiceCache);
+}
+
+// Tries each preferred name (in order, case-insensitive substring match)
+// against the voices this visitor's browser actually offers, falling back to
+// the browser's default English voice — and ultimately its default voice —
+// when none of the preferences are available.
+function pickVoice(preferredNames = []) {
+  for (const name of preferredNames) {
+    const match = cachedVoices.find((v) => v.name.toLowerCase().includes(name.toLowerCase()));
+    if (match) return match;
+  }
+  return cachedVoices.find((v) => v.lang?.startsWith("en")) || null;
+}
+
+export function applyVoicePreference(utterance, preferredNames) {
+  const voice = pickVoice(preferredNames);
+  if (voice) utterance.voice = voice;
+}
+
 export class VoiceFillEngine {
-  constructor({ form, fields, els, onDone }) {
+  constructor({ form, fields, els, onDone, voicePreferences }) {
     this.form = form;
     this.fields = fields;
     this.els = els;
     this.onDone = onDone;
+    this.voicePreferences = voicePreferences || [];
     this.queue = [];
     this.index = 0;
     this.running = false;
@@ -157,6 +201,7 @@ export class VoiceFillEngine {
     this.setStatus(text);
     return new Promise((resolve) => {
       const utterance = new SpeechSynthesisUtterance(text);
+      applyVoicePreference(utterance, this.voicePreferences);
       utterance.onend = resolve;
       utterance.onerror = resolve;
       window.speechSynthesis.speak(utterance);
