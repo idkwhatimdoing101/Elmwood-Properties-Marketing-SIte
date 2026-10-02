@@ -75,9 +75,9 @@ export interface Offering {
 // same unit type at different prices — this is a many-to-many mapping,
 // not one building per type.
 export const offerings: Offering[] = [
-  { buildingSlug: "1040-como-ave-se", unitType: "studio", price: 1250 },
-  { buildingSlug: "1040-como-ave-se", unitType: "oneBed", price: 1250 },
-  { buildingSlug: "1100-como-ave-se", unitType: "oneBed", price: 1250 },
+  { buildingSlug: "1040-como-ave-se", unitType: "studio", price: 1150 },
+  { buildingSlug: "1040-como-ave-se", unitType: "oneBed", price: 1300 },
+  { buildingSlug: "1100-como-ave-se", unitType: "oneBed", price: 1300 },
   { buildingSlug: "1410-rollins-ave-se", unitType: "twoBed", price: 1750 },
   { buildingSlug: "1410-rollins-ave-se", unitType: "threeBed", price: 2100 },
   {
@@ -86,12 +86,12 @@ export const offerings: Offering[] = [
     price: null,
     note: "This home is currently being sold — contact us for availability.",
   },
-  { buildingSlug: "817-12th-ave-se", unitType: "studio", price: 1150 },
-  { buildingSlug: "817-12th-ave-se", unitType: "oneBed", price: 1200 },
+  { buildingSlug: "817-12th-ave-se", unitType: "studio", price: 1200 },
+  { buildingSlug: "817-12th-ave-se", unitType: "oneBed", price: 1300 },
   { buildingSlug: "817-12th-ave-se", unitType: "twoBed", price: 1500 },
   { buildingSlug: "823-15th-ave-se", unitType: "studio", price: 1250 },
-  { buildingSlug: "823-15th-ave-se", unitType: "oneBed", price: 1200 },
-  { buildingSlug: "823-15th-ave-se", unitType: "twoBed", price: 2100 },
+  { buildingSlug: "823-15th-ave-se", unitType: "oneBed", price: 1500 },
+  { buildingSlug: "823-15th-ave-se", unitType: "threeBed", price: 2100 },
   { buildingSlug: "837-15th-ave-se", unitType: "threeBed", price: 2100, note: "Penthouse unit." },
 ];
 
