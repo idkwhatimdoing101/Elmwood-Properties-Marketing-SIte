@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
+import { web3FormsAccessKey } from "../data/site";
+import officeMap from "../assets/images/map1420rollins.png";
 ---
 
 <Layout
@@ -24,18 +26,13 @@ import Divider from "../components/Divider.astro";
     <div class="wrap contact-grid">
       <div class="contact-form-wrap">
         <form
-          class="netlify-form"
+          class="web3-form"
           name="contact"
-          method="POST"
-          data-netlify="true"
-          data-netlify-honeypot="bot-field"
+          data-access-key={web3FormsAccessKey}
+          data-subject="Website message ({topic}) — {name}"
         >
-          <input type="hidden" name="form-name" value="contact" />
-          <p hidden>
-            <label>
-              Don't fill this out if you're human: <input name="bot-field" autocomplete="off" tabindex="-1" />
-            </label>
-          </p>
+          <!-- Spam honeypot: Web3Forms drops submissions where this is checked. -->
+          <input type="checkbox" name="botcheck" hidden tabindex="-1" autocomplete="off" />
 
           <div class="form-grid">
             <div class="field">
@@ -92,27 +89,28 @@ import Divider from "../components/Divider.astro";
             <dd>Answered 24/7</dd>
           </div>
         </dl>
-        <div class="office-card__map">Map — 1420 Rollins Ave SE</div>
+        <a
+          href="https://www.google.com/maps/dir/?api=1&destination=1420+Rollins+Ave+SE,+Minneapolis,+MN+55414"
+          target="_blank"
+          rel="noopener"
+          class="office-card__map"
+        >
+          <img
+            src={officeMap.src}
+            width={officeMap.width}
+            height={officeMap.height}
+            alt="Map showing the Elmwood leasing office at 1420 Rollins Ave SE, at 15th Ave SE across from Van Cleve Park"
+            loading="lazy"
+          />
+          <span class="office-card__map-cta">Get directions →</span>
+        </a>
       </aside>
     </div>
   </section>
 </Layout>
 
 <script>
-  import "../scripts/netlify-form.js";
-
-  const status = document.querySelector("[data-form-status]");
-  if (status) {
-    const observer = new MutationObserver(() => {
-      const state = (status as HTMLElement).dataset.state;
-      status.querySelectorAll("p").forEach((p) => {
-        const show = (state === "success" && p.hasAttribute("data-success")) ||
-          (state === "error" && p.hasAttribute("data-error"));
-        (p as HTMLElement).style.display = show ? "block" : "none";
-      });
-    });
-    observer.observe(status, { attributes: true, attributeFilter: ["data-state"] });
-  }
+  import "../scripts/web3-form.js";
 </script>
 
 <style>
@@ -195,19 +193,39 @@ import Divider from "../components/Divider.astro";
   }
 
   .office-card__map {
+    position: relative;
+    display: block;
     margin-top: 1.75rem;
     aspect-ratio: 4 / 3;
     border-radius: var(--radius-sm);
-    background: linear-gradient(155deg, #dfe2cd 0%, #cdd2b9 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 0.875rem;
-    color: var(--color-forest-deep);
-    text-align: center;
-    padding: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--color-sage-line);
+    text-decoration: none;
+  }
+
+  .office-card__map img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Keep the Elmwood pin (left of center in the screenshot) in frame. */
+    object-position: 44% 62%;
+    transition: transform 0.3s ease;
+  }
+
+  .office-card__map:hover img {
+    transform: scale(1.03);
+  }
+
+  .office-card__map-cta {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: var(--color-forest);
+    color: var(--color-ivory);
+    font-size: 0.8125rem;
+    font-weight: 600;
   }
 
   @media (max-width: 56rem) {

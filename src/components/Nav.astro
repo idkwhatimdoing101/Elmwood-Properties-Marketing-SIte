@@ -2,15 +2,24 @@
 import elmwoodLogo from "../assets/images/elmwood-logo.png";
 import { calendlyUrl } from "../data/site";
 
-const links = [
+const links: NavItem[] = [
   { href: "/", label: "Home" },
   { href: "/floor-plans", label: "Floor Plans" },
   { href: "/amenities", label: "Amenities" },
   { href: "/neighborhood", label: "Neighborhood" },
   { href: "/gallery", label: "Gallery" },
+  {
+    label: "Residents",
+    children: [
+      { href: "/maintenance-request", label: "Maintenance Request" },
+      { label: "Make a Payment (coming soon)" },
+    ],
+  },
   { href: "/contact", label: "Contact" },
   { href: "/apply", label: "Apply" },
 ];
+
+type NavItem = { href?: string; label: string; children?: NavItem[] };
 
 const current = Astro.url.pathname;
 ---
@@ -47,17 +56,52 @@ const current = Astro.url.pathname;
       <nav class="nav__menu" id="nav-menu">
         <ul class="nav__links">
           {
-            links.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  class="nav__link"
-                  aria-current={current === link.href ? "page" : undefined}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
+            links.map((link) =>
+              link.children ? (
+                <li class="nav__dropdown">
+                  <button
+                    type="button"
+                    class="nav__link nav__dropdown-toggle"
+                    aria-expanded="false"
+                    aria-current={link.children.some((c) => c.href === current) ? "page" : undefined}
+                  >
+                    {link.label}
+                    <svg class="nav__caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true">
+                      <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                  </button>
+                  <ul class="nav__submenu">
+                    {link.children.map((child) => (
+                      <li>
+                        {child.href ? (
+                          <a
+                            href={child.href}
+                            class="nav__sublink"
+                            aria-current={current === child.href ? "page" : undefined}
+                          >
+                            {child.label}
+                          </a>
+                        ) : (
+                          <span class="nav__sublink nav__sublink--disabled" aria-disabled="true">
+                            {child.label}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ) : (
+                <li>
+                  <a
+                    href={link.href}
+                    class="nav__link"
+                    aria-current={current === link.href ? "page" : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              )
+            )
           }
         </ul>
         <a href={calendlyUrl} target="_blank" rel="noopener" class="btn btn-primary nav__cta">Book a Tour</a>
@@ -74,6 +118,29 @@ const current = Astro.url.pathname;
     const isOpen = menu?.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", String(Boolean(isOpen)));
     toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+  });
+
+  // Residents dropdown: hover opens it on desktop (CSS); click/tap and keyboard toggle it.
+  const dropdowns = document.querySelectorAll<HTMLElement>(".nav__dropdown");
+  const closeAll = (except?: HTMLElement) =>
+    dropdowns.forEach((d) => {
+      if (d !== except) d.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "false");
+    });
+
+  dropdowns.forEach((dropdown) => {
+    const btn = dropdown.querySelector(".nav__dropdown-toggle");
+    btn?.addEventListener("click", () => {
+      const open = btn.getAttribute("aria-expanded") === "true";
+      closeAll(dropdown);
+      btn.setAttribute("aria-expanded", String(!open));
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!(e.target as Element).closest(".nav__dropdown")) closeAll();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeAll();
   });
 
   menu?.querySelectorAll("a").forEach((a) => {
@@ -240,7 +307,125 @@ const current = Astro.url.pathname;
     color: var(--color-forest);
   }
 
+  /* Residents dropdown */
+  .nav__dropdown {
+    position: relative;
+  }
+
+  .nav__dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .nav__caret {
+    transition: transform 0.2s ease;
+  }
+
+  .nav__dropdown-toggle[aria-expanded="true"] .nav__caret {
+    transform: rotate(180deg);
+  }
+
+  .nav__submenu {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: -1rem;
+    min-width: 15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.5rem;
+    background: var(--color-ivory);
+    border: 1px solid var(--color-sage-line);
+    border-radius: var(--radius-md);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  }
+
+  /* Invisible bridge so the menu doesn't close while the mouse crosses the gap. */
+  .nav__submenu::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.85rem;
+    height: 0.85rem;
+  }
+
+  .nav__dropdown:hover .nav__submenu,
+  .nav__dropdown:focus-within .nav__submenu,
+  .nav__dropdown-toggle[aria-expanded="true"] + .nav__submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .nav__sublink {
+    display: block;
+    padding: 0.6rem 0.75rem;
+    border-radius: calc(var(--radius-md) - 2px);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  a.nav__sublink:hover,
+  .nav__sublink[aria-current="page"] {
+    background: var(--color-sage);
+    color: var(--color-forest);
+  }
+
+  .nav__sublink--disabled {
+    color: var(--color-text-muted);
+    cursor: default;
+  }
+
   @media (max-width: 56rem) {
+    .nav__dropdown-toggle {
+      font-size: 1.15rem;
+      padding: 0;
+    }
+
+    .nav__submenu {
+      position: static;
+      min-width: 0;
+      padding: 0 0 0 1rem;
+      margin-top: 0;
+      background: none;
+      border: none;
+      box-shadow: none;
+      transform: none;
+      display: none;
+    }
+
+    .nav__submenu::before {
+      display: none;
+    }
+
+    .nav__dropdown-toggle[aria-expanded="true"] + .nav__submenu {
+      display: flex;
+      margin-top: 0.75rem;
+    }
+
+    .nav__sublink {
+      font-size: 1rem;
+      padding: 0.4rem 0;
+    }
+
+    a.nav__sublink:hover,
+    .nav__sublink[aria-current="page"] {
+      background: none;
+    }
+
     .utility-bar__address {
       display: none;
     }

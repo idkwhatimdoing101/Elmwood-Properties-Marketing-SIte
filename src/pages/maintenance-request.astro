@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Divider from "../components/Divider.astro";
+import { web3FormsAccessKey } from "../data/site";
 
 const urgencyLevels = [
   {
@@ -67,18 +68,13 @@ const urgencyLevels = [
   <section class="section">
     <div class="wrap wrap--narrow">
       <form
-        class="netlify-form"
+        class="web3-form"
         name="maintenance-request"
-        method="POST"
-        data-netlify="true"
-        data-netlify-honeypot="bot-field"
+        data-access-key={web3FormsAccessKey}
+        data-subject="Maintenance request ({urgency}) — {address}"
       >
-        <input type="hidden" name="form-name" value="maintenance-request" />
-        <p hidden>
-          <label>
-            Don't fill this out if you're human: <input name="bot-field" autocomplete="off" tabindex="-1" />
-          </label>
-        </p>
+        <!-- Spam honeypot: Web3Forms drops submissions where this is checked. -->
+        <input type="checkbox" name="botcheck" hidden tabindex="-1" autocomplete="off" />
 
         <div class="form-grid">
           <div class="field">
@@ -144,20 +140,7 @@ const urgencyLevels = [
 </Layout>
 
 <script>
-  import "../scripts/netlify-form.js";
-
-  const status = document.querySelector("[data-form-status]");
-  if (status) {
-    const observer = new MutationObserver(() => {
-      const state = (status as HTMLElement).dataset.state;
-      status.querySelectorAll("p").forEach((p) => {
-        const show = (state === "success" && p.hasAttribute("data-success")) ||
-          (state === "error" && p.hasAttribute("data-error"));
-        (p as HTMLElement).style.display = show ? "block" : "none";
-      });
-    });
-    observer.observe(status, { attributes: true, attributeFilter: ["data-state"] });
-  }
+  import "../scripts/web3-form.js";
 </script>
 
 <style>
