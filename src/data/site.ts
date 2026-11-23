@@ -5,6 +5,13 @@ export const calendlyUrl = "https://calendly.com/elmwoodproperties/apartment-tou
 // when this key was created at web3forms.com (admin@elmwoodapartmentsmn.com).
 export const web3FormsAccessKey = "345819b0-730b-43df-be82-dbda7e54e906";
 
+// Web3Forms access key for the maintenance request form. Web3Forms sends each
+// key's submissions to the one address it was created with, so maintenance
+// requests need their own key to reach maintenance@elmwoodproperties.com.
+// TODO: replace with the key created for maintenance@elmwoodproperties.com —
+// until then this is the admin key, so requests still go to admin@.
+export const web3FormsMaintenanceKey = "345819b0-730b-43df-be82-dbda7e54e906";
+
 // Preferred text-to-speech voice for the Fill-by-Voice tool and application
 // readback (src/pages/apply.astro). The browser/OS supplies the actual voices
 // (not the website), and the options differ by visitor's device, so this is a

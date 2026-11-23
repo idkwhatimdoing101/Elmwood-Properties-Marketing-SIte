@@ -1,76 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Divider from "../components/Divider.astro";
-import { web3FormsAccessKey } from "../data/site";
-
-const urgencyLevels = [
-  {
-    title: "Emergency",
-    body: "Fire, gas smell, active flooding, no heat in winter, or you're locked out. Call us — don't wait on this form.",
-  },
-  {
-    title: "Urgent",
-    body: "No hot water, a major appliance is out, or something's broken in a way that affects daily life. We aim to respond same-day.",
-  },
-  {
-    title: "Routine",
-    body: "A running toilet, a squeaky door, a light that needs a bulb. We'll get to it in the order it comes in, usually within a few days.",
-  },
-];
+import { web3FormsMaintenanceKey } from "../data/site";
 ---
 
 <Layout
   title="Maintenance Request"
   description="Submit a maintenance request for your Elmwood apartment. Emergencies are answered 24/7 by phone."
 >
-  <section class="section hero-sm">
-    <div class="wrap">
-      <p class="eyebrow">For Current Residents</p>
-      <h1>Something needs fixing? Tell us.</h1>
-      <p class="lede">
-        Use the form below for anything that isn't an emergency. It goes straight to our
-        maintenance team.
-      </p>
-    </div>
-  </section>
-
-  <section class="section--tight">
-    <div class="wrap">
-      <div class="emergency-banner">
-        <div>
-          <p class="emergency-banner__title">Fire, gas smell, flooding, or a lock-out?</p>
-          <p>Skip the form — call us directly. We answer 24/7.</p>
-        </div>
-        <a href="tel:+16126234488" class="btn btn-ghost emergency-banner__btn">Call (612) 623-4488</a>
-      </div>
-    </div>
-  </section>
-
-  <Divider />
-
-  <section class="section section--sage">
-    <div class="wrap">
-      <p class="eyebrow">Before You Submit</p>
-      <h2 class="urgency-heading">How urgent is it?</h2>
-      <div class="urgency-grid">
-        {
-          urgencyLevels.map((level) => (
-            <div class="urgency-card">
-              <h3>{level.title}</h3>
-              <p>{level.body}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+  <!-- Page heading kept for screen readers and search engines; hidden visually per client request. -->
+  <h1 class="visually-hidden">Maintenance Request</h1>
 
   <section class="section">
     <div class="wrap wrap--narrow">
       <form
         class="web3-form"
         name="maintenance-request"
-        data-access-key={web3FormsAccessKey}
+        data-access-key={web3FormsMaintenanceKey}
         data-subject="Maintenance request ({urgency}) — {address}"
       >
         <!-- Spam honeypot: Web3Forms drops submissions where this is checked. -->
@@ -132,9 +77,13 @@ const urgencyLevels = [
       </form>
 
       <div class="form-status" data-form-status hidden>
-        <p data-success>Request received. Our maintenance team has it — expect a call to confirm timing.</p>
+        <p data-success>We have received your maintenance request. Thank you.</p>
         <p data-error>Something went wrong submitting that. Please call us directly at (612) 623-4488.</p>
       </div>
+
+      <p class="emergency-note">
+        If this is an emergency, please call <a href="tel:+16126234488">(612) 623-4488</a>.
+      </p>
     </div>
   </section>
 </Layout>
@@ -144,68 +93,29 @@ const urgencyLevels = [
 </script>
 
 <style>
-  .hero-sm h1 {
-    margin-block: 0.9rem 1rem;
-    max-width: 32rem;
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
-  .hero-sm .lede {
-    max-width: 32rem;
+  .emergency-note {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-sage-line);
+    font-weight: 600;
+    color: var(--color-text);
   }
 
-  .emergency-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    background: var(--color-charcoal);
-    color: var(--color-ivory);
-    padding: 1.5rem 2rem;
-    border-radius: var(--radius-md);
-  }
-
-  .emergency-banner__title {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .emergency-banner p:last-child {
-    color: var(--color-text-on-dark-muted);
-    font-size: 0.9375rem;
-  }
-
-  .emergency-banner__btn {
-    flex-shrink: 0;
-  }
-
-  .urgency-heading {
-    margin-block: 0.9rem 2rem;
-  }
-
-  .urgency-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5rem;
-  }
-
-  .urgency-card {
-    background: var(--color-ivory);
-    border: 1px solid var(--color-sage-line);
-    border-radius: var(--radius-md);
-    padding: 1.75rem;
-  }
-
-  .urgency-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.6rem;
-  }
-
-  .urgency-card p {
-    font-size: 0.9375rem;
-    color: var(--color-text-muted);
-    line-height: 1.6;
+  .emergency-note a {
+    color: var(--color-forest);
+    white-space: nowrap;
   }
 
   .form-status {
@@ -227,11 +137,5 @@ const urgencyLevels = [
 
   .form-status p {
     display: none;
-  }
-
-  @media (max-width: 56rem) {
-    .urgency-grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>
