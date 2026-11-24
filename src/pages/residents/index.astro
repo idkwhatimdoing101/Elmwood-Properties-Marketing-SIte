@@ -1,0 +1,115 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { residentServices } from "../../data/residentServices";
+---
+
+<Layout
+  title="Resident Portal"
+  description="Elmwood Apartments resident portal: submit maintenance requests and, coming soon, pay rent and deposits and complete your move-in form online."
+>
+  <section class="section hero-sm">
+    <div class="wrap">
+      <p class="eyebrow">Residents</p>
+      <h1>Resident Portal</h1>
+      <p class="lede">Everything you need as an Elmwood resident, in one place.</p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <ul class="services">
+        {
+          residentServices.map((s) => (
+            <li class="service">
+              <div class="service__head">
+                <h2 class="service__title">{s.title}</h2>
+                {s.status === "coming-soon" && <span class="service__tag">Coming soon</span>}
+              </div>
+              <p class="service__desc">{s.description}</p>
+              {s.status === "live" ? (
+                <a href={`/residents/${s.slug}`} class="btn btn-primary service__cta">
+                  {s.cta}
+                </a>
+              ) : (
+                <a href={`/residents/${s.slug}`} class="btn btn-outline service__cta">
+                  Learn More
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="help-note">
+        Questions, or need something that isn't listed here? Call us at <a href="tel:+16126234488">(612) 623-4488</a>.
+        We answer day or night.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sm h1 {
+    max-width: 20ch;
+  }
+  .services {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+  }
+
+  .service {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.75rem;
+    background: var(--color-ivory);
+    border: 1px solid var(--color-sage-line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+  }
+
+  .service__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .service__title {
+    font-size: var(--step-h3);
+    margin: 0;
+  }
+
+  .service__tag {
+    font-size: var(--step-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-brass);
+  }
+
+  .service__desc {
+    color: var(--color-text-muted);
+    margin: 0;
+    flex: 1;
+  }
+
+  .service__cta {
+    align-self: flex-start;
+  }
+
+  .help-note {
+    margin-top: 2.5rem;
+    color: var(--color-text-muted);
+  }
+
+  .help-note a {
+    color: var(--color-forest);
+    white-space: nowrap;
+  }
+</style>

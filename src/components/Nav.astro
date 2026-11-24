@@ -1,6 +1,7 @@
 ---
 import elmwoodLogo from "../assets/images/elmwood-logo.png";
 import { calendlyUrl } from "../data/site";
+import { cleanPath } from "../utils/pagePath";
 
 const links: NavItem[] = [
   { href: "/", label: "Home" },
@@ -8,20 +9,19 @@ const links: NavItem[] = [
   { href: "/amenities", label: "Amenities" },
   { href: "/neighborhood", label: "Neighborhood" },
   { href: "/gallery", label: "Gallery" },
-  {
-    label: "Residents",
-    children: [
-      { href: "/maintenance-request", label: "Maintenance Request" },
-      { label: "Make a Payment (coming soon)" },
-    ],
-  },
+  { href: "/residents", label: "Residents", highlight: true },
   { href: "/contact", label: "Contact" },
   { href: "/apply", label: "Apply" },
 ];
 
-type NavItem = { href?: string; label: string; children?: NavItem[] };
+// highlight: shows the link in bold green so it stands out (used for Residents).
+type NavItem = { href?: string; label: string; highlight?: boolean; children?: NavItem[] };
 
-const current = Astro.url.pathname;
+const current = cleanPath(Astro.url.pathname);
+// A link counts as the current page on its own URL and on any page beneath it
+// (e.g. "Residents" stays highlighted on /residents/maintenance-request).
+const isCurrent = (href?: string) =>
+  !!href && (current === href || (href !== "/" && current.startsWith(href + "/")));
 ---
 
 <div class="site-header">
@@ -31,7 +31,7 @@ const current = Astro.url.pathname;
         <a href="tel:+16126234488" class="utility-bar__phone">(612) 623-4488 — we answer, day or night</a>
         <span class="utility-bar__address">1420 Rollins Ave SE, Minneapolis, MN</span>
       </div>
-      <a href="/apply" class="utility-bar__apply" aria-current={current === "/apply" ? "page" : undefined}>Ready to Apply? Click Here! →</a>
+      <a href="/apply" class="utility-bar__apply" aria-current={current === "/apply" ? "page" : undefined}>Ready to Apply for an Apartment? Click Here! →</a>
     </div>
   </div>
 
@@ -94,8 +94,8 @@ const current = Astro.url.pathname;
                 <li>
                   <a
                     href={link.href}
-                    class="nav__link"
-                    aria-current={current === link.href ? "page" : undefined}
+                    class:list={["nav__link", { "nav__link--highlight": link.highlight }]}
+                    aria-current={isCurrent(link.href) ? "page" : undefined}
                   >
                     {link.label}
                   </a>
@@ -305,6 +305,23 @@ const current = Astro.url.pathname;
 
   .nav__link[aria-current="page"] {
     color: var(--color-forest);
+  }
+
+  /* Highlighted link (Residents): bold green, dark green while clicked and
+     when you're in the Resident Portal. */
+  .nav__link--highlight {
+    font-weight: 700;
+    color: var(--color-forest);
+    transition: color 0.15s ease;
+  }
+
+  .nav__link--highlight:active,
+  .nav__link--highlight[aria-current="page"] {
+    color: var(--color-forest-deep);
+  }
+
+  .nav__link--highlight[aria-current="page"]::after {
+    background: var(--color-forest-deep);
   }
 
   /* Residents dropdown */

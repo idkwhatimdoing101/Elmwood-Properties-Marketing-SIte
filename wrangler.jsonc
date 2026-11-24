@@ -1,0 +1,10 @@
+// Cloudflare Workers settings. The Astro Cloudflare adapter merges this into the
+// generated dist/client/wrangler.json at build time.
+{
+  "name": "my-site",
+  "compatibility_date": "2026-04-15",
+  "assets": {
+    // Show our branded src/pages/404.astro page for missing URLs instead of a blank 404.
+    "not_found_handling": "404-page"
+  }
+}

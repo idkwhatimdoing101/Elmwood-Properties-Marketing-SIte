@@ -1,6 +1,6 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { web3FormsMaintenanceKey } from "../data/site";
+import Layout from "../../layouts/Layout.astro";
+import { web3FormsMaintenanceKey } from "../../data/site";
 ---
 
 <Layout
@@ -12,6 +12,7 @@ import { web3FormsMaintenanceKey } from "../data/site";
 
   <section class="section">
     <div class="wrap wrap--narrow">
+      <a href="/residents" class="back-link">← Resident Portal</a>
       <form
         class="web3-form"
         name="maintenance-request"
@@ -89,7 +90,7 @@ import { web3FormsMaintenanceKey } from "../data/site";
 </Layout>
 
 <script>
-  import "../scripts/web3-form.js";
+  import "../../scripts/web3-form.js";
 </script>
 
 <style>
@@ -103,6 +104,19 @@ import { web3FormsMaintenanceKey } from "../data/site";
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-forest);
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
   }
 
   .emergency-note {
